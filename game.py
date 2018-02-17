@@ -1,12 +1,12 @@
 import pygame, math, random
 pygame.init()
 
-ctx = pygame.display.set_mode((120,130))
+ctx = pygame.display.set_mode((200,100))
 pygame.display.set_caption("CircleGame")
 clock = pygame.time.Clock()
 
 class Room(object):
-	def __init__(self,xLength,yLength):
+	def __init__(self):
 		pass
 
 def close():
@@ -16,5 +16,5 @@ def close():
 
 def main():
 	pygame.display.update()
-	clock.tick(60)
+	clock.tick(2)
 main()
