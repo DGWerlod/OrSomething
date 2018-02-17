@@ -1,7 +1,7 @@
 import pygame, math, random
 pygame.init()
 
-ctx = pygame.display.set_mode((gameW,gameH))
+ctx = pygame.display.set_mode((120,130))
 pygame.display.set_caption("CircleGame")
 clock = pygame.time.Clock()
 
