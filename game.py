@@ -180,9 +180,9 @@ def levelSelect():
 obstructions = [Entity(0,580,900,20,media.blueBlocks)]
 returnButton = Selection(725,25,150,80,media.blueBlocks,2)
 
-materialButton = Selection(750,225,100,50,(0,105,207),-1)
-materialButton1 = Selection(750,300,50,50,(0,105,207),-1)
-materialButton2 = Selection(750,375,25,50,(0,105,207),-1)
+materialButton = Selection(725,225,100,50,(0,105,207),-1)
+materialButton1 = Selection(725,300,50,50,(0,105,207),-1)
+materialButton2 = Selection(725,375,25,50,(0,105,207),-1)
 block = Material(100,50)
 
 
@@ -214,18 +214,18 @@ def level():
 
 	#level 1 specifics
 	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
-	textRect.left += 805 
+	textRect.left += 825 
+	textRect.top = 225 + 35-2 - textRect.h/2
+	ctx.blit(text,textRect)
+    
+	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
+	textRect.left += 825 
 	textRect.top = 300 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
 	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
-	textRect.left += 805 
-	textRect.top = 300 + 35-2 - textRect.h/2
-	ctx.blit(text,textRect)
-    
-	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
-	textRect.left += 805 
-	textRect.top = 300 + 35-2 - textRect.h/2
+	textRect.left += 825 
+	textRect.top = 375 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
 	#if(mouse['held'] && collisions.pointRect(mouse['pos'],materialButton):
