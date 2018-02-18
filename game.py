@@ -2,6 +2,7 @@ import pygame, math, random
 import media
 pygame.init()
 
+gameW, gameH = 900, 600
 
 ctx = pygame.display.set_mode((gameW,gameH))
 pygame.display.set_caption("Albert")
