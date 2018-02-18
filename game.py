@@ -39,16 +39,18 @@ class Material(Entity):
 		super().__init__(0,0,w,h,color)
 		self.exists = False
 		self.moving = False
-	def place(x, y):
+	def pickup(self):
 		self.exists = True
-		self.x = x
-		self.y = y
-	def remove():
+		self.moving = True
+	def remove(self):
 		self.exists = False
-	def go():
+	def go(self):
 		if self.exists:
+			if not mouse['held']:
+				self.moving = False
 			if self.moving:
-				self.place(mouse['pos'][0],mouse['pos'][1])
+				self.x = mouse['pos'][0]-self.w/2
+				self.y = mouse['pos'][1]-self.h/2
 			self.draw()
 
 class Actor(Entity):
@@ -107,7 +109,7 @@ class Player(Actor):
 		elif not self.isOnGround():
 			self.spd[1] -= gravity
 		if self.isOnGround() and (controls['keyW'] == True or controls['keySpace'] == True):
-			self.spd[1] = 10
+			self.spd[1] = 15
 
 	def draw(self):
 		ctx.blit(self.img[self.level],(self.x,self.y))
@@ -182,11 +184,12 @@ def levelSelect():
 obstructions = [Entity(0,580,900,20,media.blueBlocks)]
 returnButton = Selection(725,25,150,80,media.blueBlocks,2)
 materialButton = Selection(750,300,100,50,(0,105,207),-1)
+block = Material(100,50,media.blueBlocks)
 
 def level():
 	ctx.fill(media.greyBG)
 	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600)) # right panel
-	
+
 	for o in obstructions:
 		o.go()
 	returnButton.go();
@@ -202,6 +205,8 @@ def level():
 	textRect.left += 730-2 
 	textRect.top = 475 + 35 - textRect.h/2
 	ctx.blit(text,textRect)
+
+	block.go()
 
 	daniel.go()
 	
@@ -260,9 +265,11 @@ def main():
 					if collisions.pointRect(mouse['pos'],l):
 						#levels[l.levelID].load()
 						screenid += 1
-						daniel.y = 300
-			elif collisions.pointRect(mouse['pos'],returnButton):
-				screenid = 2
+			else:
+				if collisions.pointRect(mouse['pos'],returnButton):
+					screenid = 2
+				if collisions.pointRect(mouse['pos'],materialButton):
+					block.pickup()
 
 		if screenid == 0:
 			titleScreen()
