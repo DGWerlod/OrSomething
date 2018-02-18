@@ -17,7 +17,7 @@ def buildText(rawText,size,color):
 	return text
 
 def centeredText(rawText,size,color,widthOfParent):
-	text = buildText(rawText,size)
+	text = buildText(rawText,size,color)
 	textRect = text.get_rect()
 	textRect.left = widthOfParent/2 - textRect.width/2
 	return text, textRect
