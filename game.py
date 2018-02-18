@@ -123,13 +123,26 @@ def level():
 	ctx.fill(media.greyBG)
 	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600))
 	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
-	pygame.draw.rect(ctx,(0,65,128),(725,25,150,80))
 	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
+	pygame.draw.rect(ctx,(0,65,128),(725,25,150,80))
 	text, textRect = media.centeredText("Select Level", 20, (206,206,206), 150)
 	textRect.left += 725 
 	textRect.top = 25 + 40 - textRect.h/2
 	ctx.blit(text,textRect)
+	pygame.draw.rect(ctx,(30,144,255),(725,475,150,80))
+	text, textRect = media.centeredText("GO", 50, (206,206,206), 150)
+	textRect.left += 730-2 
+	textRect.top = 475 + 35 - textRect.h/2
+	ctx.blit(text,textRect)
 	daniel.draw()
+    
+    #level 1 specifics
+	pygame.draw.rect(ctx,(0,105,207),(750,300,100,50))
+	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
+	textRect.left += 805 
+	textRect.top = 300 + 35-2 - textRect.h/2
+	ctx.blit(text,textRect)
+
 
 
 
