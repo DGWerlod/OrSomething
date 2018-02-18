@@ -153,7 +153,8 @@ def main():
 			elif screenid == 2:
 				for l in levelRects:
 					if collisions.pointRect(mouse['pos'],l):
-						levels[l.levelID].load()
+						#levels[l.levelID].load()
+						screenid += 1
 
 
 		if screenid == 0:
