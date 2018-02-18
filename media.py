@@ -14,11 +14,11 @@ playerBody = [pygame.image.load("img/basic.png"),
 def buildText(rawText,size):
 	font = pygame.font.Font("fonts/muli.ttf",size)
 	text = font.render(rawText,True,(31,31,31))
-	textRect = text.get_rect()
-	return text, textRect
+	return text
 
 def centeredText(rawText,size,widthOfParent):
-	text, textRect = buildText(rawText,size)
+	text = buildText(rawText,size)
+	textRect = text.get_rect()
 	textRect.left = widthOfParent/2 - textRect.width/2
 	return text, textRect
 
