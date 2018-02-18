@@ -138,6 +138,7 @@ def main():
 
 		if mouse['click']:
 			if screenid < 2:
+				screenid += 1
 
 		if screenid == 0:
 			titleScreen()
