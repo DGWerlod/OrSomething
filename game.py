@@ -1,29 +1,77 @@
 import pygame, math, random
 pygame.init()
 
-ctx = pygame.display.set_mode((900,600))
+gameW = 900
+gameH = 600
+
+ctx = pygame.display.set_mode((gameW,gameH))
 pygame.display.set_caption("Albert")
 clock = pygame.time.Clock()
 
 class Entity(object):
-	def  __init__(self,x,y,w,h):
+	def  __init__(self,x,y,w,h,color):
 		self.x = x
 		self.y = y
 		self.w = w
 		self.h = h
+		self.color = color
 	def pos(self):
 		pass
 	def draw(self):
-		pygame.draw.rect(ctx,(0,0,0),(self.x,self.y,self.w,self.h))
+		pygame.draw.rect(ctx,color,(self.x,self.y,self.w,self.h))
 	def go(self):
 		self.pos()
 		self.draw()
+
+class Material(Entity):
+	def __init__(self,w,h,color):
+		super().__init__(0,0,w,h,color)
+		self.exists = False
+	def place(x, y):
+		self.exists = True
+		self.x = x
+		self.y = y
+	def remove():
+		self.exists = False
+	def go():
+		if self.exists:
+			self.draw()
+
+class Enemy(Entity):
+	def __init__(self):
+		pass
+
+class Player(Entity):
+	def __init__(self):
+		pass
+
+
+class Room(object):
+	def __init__(self,start,goal,materials,enemies):
+		self.start = start
+		self.goal = goal
+		self.materials = materials
+		self.enemies = enemies
+	def load(self):
+		pass
+
+def titleScreen():
+	ctx.fill((30,144,255))
+	title = media.muli.render(str(round(player.hp)),True,(31,31,31))
+	titleRect = score.get_rect()
+	scoreRECT.right = gameW - 5
+	scoreRECT.top = gameH - gameIH
+	ctx.blit(score,scoreRECT)
+	fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,colors.black)
+	fpsRECT = fps.get_rect()
+	ctx.blit(fps,(5,0))
+
 
 def close():
 	pygame.quit()
 	quit()
 
-anEntity = Entity(13,10,10,10)
+anEntity = Entity(13,10,10,10,(0,0,0))
 
 def main():
 	while True:
