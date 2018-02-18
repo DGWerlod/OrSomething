@@ -2,11 +2,8 @@ import pygame, math, random
 import media, collisions
 pygame.init()
 
-global gameW, gameH, presets, controls, mouse, screenid
-
+global gameW, gameH, mouse, screenid
 gameW, gameH = 900, 600
-presets = {'keyW':pygame.K_w,'keyA':pygame.K_a,'keyS':pygame.K_s,'keyD':pygame.K_d,'keySpace':pygame.K_SPACE}
-controls = {'keyW':False,'keyA':False,'keyS':False,'keyD':False,'keySpace':False}
 mouse = {'pos':pygame.mouse.get_pos(),'click':False,'held':False}
 screenid = 0
 
@@ -78,11 +75,11 @@ levels = [0,0,0,"""the levels"""]
 
 def titleScreen():
 	ctx.fill((30,144,255))    
-	title, titleRECT = media.centeredText("ALBERT THE INTIMIDATING", 60, gameW)
+	title, titleRECT = media.centeredText("ALBERT THE INTIMIDATING", 60, (31,31,31), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2
 	ctx.blit(title,titleRECT)
 
-	title, titleRECT = media.centeredText("click anywhere to continue", 30, gameW)
+	title, titleRECT = media.centeredText("click anywhere to continue", 30, (31,31,31),gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -200
 	ctx.blit(title,titleRECT)
 
@@ -92,22 +89,22 @@ def titleScreen():
 
 def instructions():
 	ctx.fill((30,144,255))
-	title, titleRECT = media.centeredText("Instructions", 60, gameW)
+	title, titleRECT = media.centeredText("Instructions", 60,(31,31,31), gameW)
 	titleRECT.top = titleRECT.height/2 +10
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("wasd to move", 30, gameW)
+	title, titleRECT = media.centeredText("wasd to move", 30,(31,31,31), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -100
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("space to jump", 30, gameW)
+	title, titleRECT = media.centeredText("space to jump", 30,(31,31,31), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -50
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("Drag and drop objects to build your environment", 30, gameW)
+	title, titleRECT = media.centeredText("Drag and drop objects to build your environment", 30, (31,31,31),gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -0
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("Reach the goal zone to improve your sad life", 30, gameW)
+	title, titleRECT = media.centeredText("Reach the goal zone to improve your sad life", 30,(31,31,31), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +50
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("click anywhere to continue on living your sad life", 30, gameW)
+	title, titleRECT = media.centeredText("click anywhere to continue on living your sad life", 30,(31,31,31), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
     
@@ -116,7 +113,7 @@ def levelSelect():
 	levelNum = 1
 	for l in levelRects:
 		l.draw()
-		text, textRect = media.centeredText("Level " + str(levelNum), 50, 300)
+		text, textRect = media.centeredText("Level " + str(levelNum), 50, (31,31,31),300)
 		textRect.left += l.x
 		textRect.top = l.y + l.h/2 - textRect.h/2 - 5 #-5 aesthetic
 		ctx.blit(text,textRect)
