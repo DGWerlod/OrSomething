@@ -7,6 +7,14 @@ mulismall = pygame.font.Font("fonts/muli.ttf",15)
 # font.render: text, antialias, color, bg
 # this creates a surface (img?) you can blit
 
+def centeredText(rawText,size,widthOfParent):
+	font = pygame.font.Font("fonts/muli.ttf",size)
+	text = media.muli.render(rawText,True,(31,31,31))
+	textRect = title.get_rect()
+	textRect.left = widthOfParent/2 - textRect.width/2
+	return text, textRect
+
+
 # def centerText(surface,enclosure):
 # 	rect = surface.get_rect()
 #     rect.center = ((x+(w/2)), (y+(h/2)-2)) #-2 centers Muli
