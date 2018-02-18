@@ -179,15 +179,14 @@ def levelSelect():
 
 obstructions = [Entity(0,580,900,20,media.blueBlocks)]
 returnButton = Selection(725,25,150,80,media.blueBlocks,2)
-<<<<<<< HEAD
+
 materialButton = Selection(750,225,100,50,(0,105,207),-1)
 materialButton1 = Selection(750,300,50,50,(0,105,207),-1)
 materialButton2 = Selection(750,375,25,50,(0,105,207),-1)
-block = Material(100,50,media.blueBlocks)
-=======
+block = Material(100,50)
+
 materialButton = Selection(750,300,100,50,(0,105,207),-1)
 block = Material(100,50)
->>>>>>> dde238fbb94c742ae640dd59cf2f8cf675985b96
 
 def level():
 	ctx.fill(media.greyBG)
