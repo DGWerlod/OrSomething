@@ -99,6 +99,10 @@ def instructions():
 def levelSelect():
 	ctx.fill((236, 236, 236))
 	pygame.draw.rect(ctx, (30,144,255),(100,100,300,150))
+	l1, l1RECT = media.centeredText("Level 1", 50, 300)
+	l1RECT.left += 100
+	l1RECT.top = 100 + 50-25
+	ctx.blit(l1,l1RECT)
 	pygame.draw.rect(ctx, (30,144,255),(100, 350, 300,150))
 	pygame.draw.rect(ctx, (30,144,255),(500,100,300,150))
 	pygame.draw.rect(ctx, (30,144,255),(500,350,300,150))
