@@ -119,20 +119,20 @@ def levelSelect():
 		ctx.blit(text,textRect)
 		levelNum += 1
     
+returnButton = Selection(725,25,150,80,media.greyBG,2)
+
 def level():
 	ctx.fill(media.greyBG)
+
 	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600))
 	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
-	pygame.draw.rect(ctx,(0,65,128),(725,25,150,80))
+	returnButton.go();
 	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
 	text, textRect = media.centeredText("Select Level", 20, (206,206,206), 150)
-	textRect.left += 725 
+	textRect.left += 725
 	textRect.top = 25 + 40 - textRect.h/2
 	ctx.blit(text,textRect)
 	daniel.draw()
-
-
-
 
 def close():
 	pygame.quit()
@@ -141,6 +141,8 @@ def close():
 def main():
 	global screenid
 	while True:
+
+		# EVENT HANDLING
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				close()
@@ -154,8 +156,23 @@ def main():
 		else:
 			mouse['click'] = False
 			mouse['held'] = False
+
 		mouse['pos'] = pygame.mouse.get_pos()
 
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				close()
+			elif event.type == pygame.KEYDOWN:
+				for p in presets:
+					if event.key == presets[p]:
+						controls[p] = True
+			elif event.type == pygame.KEYUP:
+				for p in presets:
+					if event.key == presets[p]:
+						controls[p] = False
+
+
+		# SCREEN CHANGING
 		if mouse['click']:
 			if screenid < 2:
 				screenid += 1
@@ -164,6 +181,9 @@ def main():
 					if collisions.pointRect(mouse['pos'],l):
 						#levels[l.levelID].load()
 						screenid += 1
+			elif collisions.pointRect(mouse['pos'],returnButton):
+				screenid = 2
+
 
 
 		if screenid == 0:
