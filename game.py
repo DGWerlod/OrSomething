@@ -2,8 +2,10 @@ import pygame, math, random
 import media, collisions
 pygame.init()
 
-global gameW, gameH, mouse, screenid
+global gameW, gameH, presets, controls, mouse, screenid
 gameW, gameH = 900, 600
+presets = {'keyW':pygame.K_w,'keyA':pygame.K_a,'keyS':pygame.K_s,'keyD':pygame.K_d,'keySpace':pygame.K_SPACE}
+controls = {'keyW':False,'keyA':False,'keyS':False,'keyD':False,'keySpace':False}
 mouse = {'pos':pygame.mouse.get_pos(),'click':False,'held':False}
 screenid = 0
 gravity = 0.75
@@ -50,16 +52,63 @@ class Actor(Entity):
 	def __init__(self,x,y,w,h,color,spd):
 		super().__init__(x,y,w,h,color)
 		self.spd = spd
+	def lockToGround(self,verticalSpeed):
+		for i in range(abs(int(verticalSpeed)), -1, -1):
+			self.y += i
+			check = self.canMove()
+			self.y -= i
+			if check:
+				return i
+		return 0
+	def isOnGround(self):
+		self.y += 1
+		check = self.canMove()
+		self.y -= 1
+		if check:
+			return False
+		else:
+			return True
 
 class Enemy(Actor):
 	def __init__(self):
 		pass
 
-class Player(Entity):
-	def __init__(self,x,y,w,h,img,level):
-		super().__init__(x,y,w,h,media.blueOG)
+class Player(Actor):
+	def __init__(self,x,y,w,h,spdX,img,level):
+		super().__init__(x,y,w,h,media.blueOG,[spdX,0])
 		self.img = img
 		self.level = level
+	def canMove(self):
+		"""for o in obstructions:
+			if collisions.rectangles(self,o,ballR):
+				return False
+		for e in enemies:
+			if collisions.rectangles(self,e,ballR):
+				return False
+		if self.y - ballR < 0 or self.x < 0 or self.y + self.h > gameH - gameIH or self.x + self.w > gameW:
+			return False"""
+		return True
+	def pos(self):
+		if controls['keyA'] == True:
+			self.x -= self.spd[0]
+			if not self.canMove():
+				self.x += self.spd[0]
+		if controls['keyD'] == True:
+			self.x += self.spd[0]
+			if not self.canMove():
+				self.x -= self.spd[0]
+
+		self.y -= self.spd[1]
+		if not self.canMove():
+			self.y += self.spd[1]
+			self.y += self.lockToGround(self.spd[1])
+			self.y = math.ceil(self.y)
+			self.spd[1] = 0
+		elif not self.isOnGround():
+			self.spd[1] -= gravity
+		if self.isOnGround() and (controls['keyW'] == True or controls['keySpace'] == True):
+			self.spd[1] = 10
+
 	def draw(self):
 		ctx.blit(self.img[self.level],(self.x,self.y))
 
@@ -67,7 +116,7 @@ levelRects = [Selection(100,100,300,150,media.blueOG,3),
 				Selection(100,350,300,150,media.blueOG,4),
 				Selection(500,100,300,150,media.blueOG,5),
 				Selection(500,350,300,150,media.blueOG,6)]
-daniel= Player(10, 520, 30, 60, media.playerBody, 0)
+daniel= Player(10, 520, 30, 60, 5, media.playerBody, 0)
 
 class Level(object):
 	def __init__(self,start,goal,materials):
@@ -124,26 +173,30 @@ def levelSelect():
 		textRect.top = l.y + l.h/2 - textRect.h/2 - 5 #-5 aesthetic
 		ctx.blit(text,textRect)
 		levelNum += 1
-    
+
+obstructions = [Entity(0,580,900,20,media.blueBlocks)]
 returnButton = Selection(725,25,150,80,media.blueBlocks,2)
 
 def level():
 	ctx.fill(media.greyBG)
-
-	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600))
-	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
+	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600)) # right panel
+	
+	for o in obstructions:
+		o.go()
 	returnButton.go();
-	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
+
 	text, textRect = media.centeredText("Select Level", 20, (206,206,206), 150)
 	textRect.left += 725
 	textRect.top = 25 + 40 - textRect.h/2
 	ctx.blit(text,textRect)
+
 	pygame.draw.rect(ctx,(30,144,255),(725,475,150,80))
 	text, textRect = media.centeredText("GO", 50, (206,206,206), 150)
 	textRect.left += 730-2 
 	textRect.top = 475 + 35 - textRect.h/2
 	ctx.blit(text,textRect)
-	daniel.draw()
+
+	daniel.go()
     
     #level 1 specifics
 	pygame.draw.rect(ctx,(0,105,207),(750,300,100,50))
@@ -202,8 +255,6 @@ def main():
 						screenid += 1
 			elif collisions.pointRect(mouse['pos'],returnButton):
 				screenid = 2
-
-
 
 		if screenid == 0:
 			titleScreen()
