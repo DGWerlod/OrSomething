@@ -42,6 +42,12 @@ class Enemy(Entity):
 		pass
 
 class Player(Entity):
+	def __init__(self,x,y,w,h,img,level):
+		super().__init__(x,y,w,h,media.blue)
+		self.img = img
+		self.level = level
+	def draw(self):
+		ctx.blit(self.img[level],(self.x,self.y,self.w,self.h))
 
 
 class Room(object):
