@@ -185,8 +185,6 @@ materialButton1 = Selection(750,300,50,50,(0,105,207),-1)
 materialButton2 = Selection(750,375,25,50,(0,105,207),-1)
 block = Material(100,50)
 
-materialButton = Selection(750,300,100,50,(0,105,207),-1)
-block = Material(100,50)
 
 def level():
 	ctx.fill(media.greyBG)
@@ -213,7 +211,7 @@ def level():
 
 	block.go()
 	daniel.go()
-	
+
 	#level 1 specifics
 	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
 	textRect.left += 805 
