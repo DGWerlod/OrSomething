@@ -42,8 +42,6 @@ class Enemy(Entity):
 		pass
 
 class Player(Entity):
-	def __init__(self):
-		pass
 
 
 class Room(object):
@@ -71,9 +69,8 @@ def titleScreen():
 
 def instructions():
 	ctx.fill((30,144,255))
-	title, titleRECT = media.centeredText("Instructions", 60, gameW)
-	titleRECT.top = gameH/2 - titleRECT.height/2 -200
 	ctx.blit(title,titleRECT)
+<<<<<<< HEAD
 	title, titleRECT = media.centeredText("wasd to move", 30, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -100
 	ctx.blit(title,titleRECT)
@@ -95,6 +92,8 @@ def level(screenid):
 	ctx.fill((236,236,236))
 	anEntity = Entity(13,10,10,10,(0,0,0)) 
 	anEntity.go()
+=======
+>>>>>>> c3b76c3ff7413e210b9f25580e994c5570e051f4
 
 def close():
 	pygame.quit()
