@@ -30,9 +30,9 @@ class Entity(object):
 		self.draw()
 
 class Selection(Entity):
-	def  __init__(self,x,y,w,h,color,levelID):
+	def  __init__(self,x,y,w,h,color,selectionID):
 		super().__init__(x,y,w,h,color)
-		self.levelID = levelID
+		self.selectionID = selectionID
 
 class Material(Entity):
 	def __init__(self,w,h):
@@ -42,8 +42,6 @@ class Material(Entity):
 	def pickup(self):
 		self.exists = True
 		self.moving = True
-	def remove(self):
-		self.exists = False
 	def go(self):
 		if self.exists:
 			if not mouse['held']:
@@ -118,18 +116,37 @@ levelRects = [Selection(100,100,300,150,media.blueOG,3),
 				Selection(100,350,300,150,media.blueOG,4),
 				Selection(500,100,300,150,media.blueOG,5),
 				Selection(500,350,300,150,media.blueOG,6)]
+returnButton = Selection(725,25,150,80,media.blueBlocks,2)
+materialButtons = [Selection(750,225,100,50,(0,105,207),0),
+					Selection(750,300,50,50,(0,105,207),1),
+					Selection(750,375,25,50,(0,105,207),2)]
+
+global obstructions, materials, usedMaterials
+obstructions = []
+materials = [[],[],[]]
+usedMaterials = [[],[],[]]
+
 daniel= Player(10, 520, 30, 60, 5, media.playerBody, 0)
 
 class Level(object):
-	def __init__(self,start,goal,materials):
+	def __init__(self,start,goal,obstructions,materials):
 		self.start = start
 		self.goal = goal
+		self.obstructions = obstructions
 		self.materials = materials
 	def load(self):
-		pass
+		daniel.x = self.start[0]
+		daniel.y = self.start[1]
+
+		global obstructions, materials, usedMaterials
+		obstructions = self.obstructions
+		materials = self.materials
+		usedMaterials = [[],[],[]]
+
 
 levels = [0,0,0,
 		Level((10,520),(500,0,200,200),
+			[Entity(0,580,900,20,media.blueBlocks)],
 			[[Material(100,50),Material(100,50),Material(100,50),Material(100,50)],
 			[],[]])
 ]
@@ -177,22 +194,14 @@ def levelSelect():
 		ctx.blit(text,textRect)
 		levelNum += 1
 
-obstructions = [Entity(0,580,900,20,media.blueBlocks)]
-returnButton = Selection(725,25,150,80,media.blueBlocks,2)
-
-materialButton = Selection(750,225,100,50,(0,105,207),-1)
-materialButton1 = Selection(750,300,50,50,(0,105,207),-1)
-materialButton2 = Selection(750,375,25,50,(0,105,207),-1)
-block = Material(100,50)
-
-
 def level():
 	ctx.fill(media.greyBG)
 	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600)) # right panel
 
 	for o in obstructions:
 		o.go()
-	returnButton.go();
+
+	returnButton.go()
 
 	text, textRect = media.centeredText("Select Level", 20, (206,206,206), 150)
 	textRect.left += 725
@@ -200,16 +209,18 @@ def level():
 	ctx.blit(text,textRect)
 
 	pygame.draw.rect(ctx,(30,144,255),(725,475,150,80))
-	materialButton.go()
-	materialButton1.go()
-	materialButton2.go()
+	for mb in materialButtons:
+		mb.go()
     
 	text, textRect = media.centeredText("GO", 50, (206,206,206), 150)
 	textRect.left += 730-2 
 	textRect.top = 475 + 35 - textRect.h/2
 	ctx.blit(text,textRect)
 
-	block.go()
+	for u in usedMaterials:
+		for uu in u:
+			uu.go()
+
 	daniel.go()
 
 	#level 1 specifics
@@ -272,13 +283,26 @@ def main():
 			elif screenid == 2:
 				for l in levelRects:
 					if collisions.pointRect(mouse['pos'],l):
-						#levels[l.levelID].load()
+						levels[l.selectionID].load()
 						screenid += 1
 			else:
 				if collisions.pointRect(mouse['pos'],returnButton):
 					screenid = 2
-				if collisions.pointRect(mouse['pos'],materialButton):
-					block.pickup()
+				for mb in materialButtons:
+					if collisions.pointRect(mouse['pos'],mb):
+						if len(materials[mb.selectionID]) != 0:
+							materials[mb.selectionID][0].pickup()
+							usedMaterials[mb.selectionID].append(materials[mb.selectionID][0])
+							materials[mb.selectionID].remove(materials[mb.selectionID][0])
+							
+						else:
+							print("NO MORE OF ID " + str(mb.selectionID))
+				for u in usedMaterials:
+					for uu in u:
+						if collisions.pointRect(mouse['pos'],uu):
+							uu.exists = False
+							materials[usedMaterials.index(u)].append(uu)
+							u.remove(uu)
 
 		if screenid == 0:
 			titleScreen()
