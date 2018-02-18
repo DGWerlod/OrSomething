@@ -296,7 +296,7 @@ def main():
 							materials[mb.selectionID].remove(materials[mb.selectionID][0])
 							
 						else:
-							print("NO MORE OF ID " + str(mb.selectionID))
+							#print("NO MORE OF ID " + str(mb.selectionID))
 				for u in usedMaterials:
 					for uu in u:
 						if collisions.pointRect(mouse['pos'],uu):
