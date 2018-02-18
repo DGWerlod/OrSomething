@@ -51,6 +51,11 @@ class Player(Entity):
 		self.level = level
 	def draw(self):
 		ctx.blit(self.img[self.level],(self.x,self.y))
+
+levelRects = [Entity(100,100,300,150,media.blueOG),
+				Entity(100,350,300,150,media.blueOG),
+				Entity(500,100,300,150,media.blueOG),
+				Entity(500,350,300,150,media.blueOG)]
 daniel= Player(10, 520, 30, 60, media.playerBody, 0)
 
 class Room(object):
@@ -98,14 +103,14 @@ def instructions():
     
 def levelSelect():
 	ctx.fill((236, 236, 236))
-	pygame.draw.rect(ctx, (30,144,255),(100,100,300,150))
-	l1, l1RECT = media.centeredText("Level 1", 50, 300)
-	l1RECT.left += 100
-	l1RECT.top = 100 + 50-25
-	ctx.blit(l1,l1RECT)
-	pygame.draw.rect(ctx, (30,144,255),(100, 350, 300,150))
-	pygame.draw.rect(ctx, (30,144,255),(500,100,300,150))
-	pygame.draw.rect(ctx, (30,144,255),(500,350,300,150))
+	levelNum = 1
+	for l in levelRects:
+		l.draw()
+		text, textRect = media.centeredText("Level " + str(levelNum), 50, 300)
+		textRect.left += l.x
+		textRect.top = l.y + l.h/2 - textRect.h/2 - 5 #-5 aesthetic
+		ctx.blit(text,textRect)
+		levelNum += 1
     
 def level(screenid):
 	ctx.fill((236,236,236))
