@@ -2,8 +2,7 @@ import pygame, math, random
 import media
 pygame.init()
 
-gameW = 900
-gameH = 600
+gameW, gameH = 900, 600
 
 ctx = pygame.display.set_mode((gameW,gameH))
 pygame.display.set_caption("Albert")
@@ -66,7 +65,6 @@ def titleScreen():
 	fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
 	fpsRECT = fps.get_rect()
 	ctx.blit(fps,(5,0))
-
 
 def close():
 	pygame.quit()
