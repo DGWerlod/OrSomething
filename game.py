@@ -132,13 +132,13 @@ class Level(object):
 levels = [0,0,0,"""the levels"""]
 
 def titleScreen():
-	ctx.fill(media.blueOG)	
-	title, titleRECT = media.centeredText("ALBERT THE INTIMIDATING", 60, (31,31,31), gameW)
+	ctx.fill(media.greyBG)
+	title, titleRECT = media.centeredText("ALBERT", 60, media.blueOG, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2
 	ctx.blit(title,titleRECT)
 
-	title, titleRECT = media.centeredText("click anywhere to continue", 30, (31,31,31),gameW)
-	titleRECT.top = gameH/2 - titleRECT.height/2 -200
+	title, titleRECT = media.centeredText("click anywhere to continue", 30, media.blueOG,gameW)
+	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
 
 	fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
@@ -146,26 +146,31 @@ def titleScreen():
 	ctx.blit(fps,(5,0))
 
 def instructions():
-	ctx.fill(media.blueOG)
-	title, titleRECT = media.centeredText("Instructions", 60,(31,31,31), gameW)
+	ctx.fill(media.greyBG)
+	title, titleRECT = media.centeredText("Instructions", 60, media.blueOG, gameW)
 	titleRECT.top = titleRECT.height/2 +10
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("wasd to move", 30,(31,31,31), gameW)
+    
+	title, titleRECT = media.centeredText("1. Drag and drop objects to build your environment", 30, media.blueOG,gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -100
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("space to jump", 30,(31,31,31), gameW)
+    
+	title, titleRECT = media.centeredText("2. Hit GO to start moving", 30, media.blueOG, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -50
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("Drag and drop objects to build your environment", 30, (31,31,31),gameW)
+    
+	title, titleRECT = media.centeredText("3.Use wasd to move and space to jump", 30, media.blueOG, gameW)    
 	titleRECT.top = gameH/2 - titleRECT.height/2 -0
-	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("Reach the goal zone to improve your sad life", 30,(31,31,31), gameW)
+	ctx.blit(title,titleRECT)    
+
+	title, titleRECT = media.centeredText("4.Reach the goal zone to improve your sad life", 30,media.blueOG, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +50
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("click anywhere to continue on living your sad life", 30,(31,31,31), gameW)
+    
+	title, titleRECT = media.centeredText("click anywhere to continue", 30, media.blueOG, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
-	
+
 def levelSelect():
 	ctx.fill(media.greyBG)
 	levelNum = 1
@@ -273,5 +278,5 @@ def main():
 			level()
 
 		pygame.display.update()
-		clock.tick(10)
+		clock.tick(60)
 main()
