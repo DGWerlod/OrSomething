@@ -2,8 +2,8 @@ import pygame, math, random
 import media, collisions
 pygame.init()
 
-global gameW, gameH, presets, controls, mouse, screenid
-gameW, gameH = 900, 600
+global gameW, gameH, gameIW, presets, controls, mouse, screenid
+gameW, gameH, gameIW = 900, 600, 700
 presets = {'keyW':pygame.K_w,'keyA':pygame.K_a,'keyS':pygame.K_s,'keyD':pygame.K_d,'keySpace':pygame.K_SPACE}
 controls = {'keyW':False,'keyA':False,'keyS':False,'keyD':False,'keySpace':False}
 mouse = {'pos':pygame.mouse.get_pos(),'click':False,'held':False}
@@ -35,8 +35,8 @@ class Selection(Entity):
 		self.levelID = levelID
 
 class Material(Entity):
-	def __init__(self,w,h,color):
-		super().__init__(0,0,w,h,color)
+	def __init__(self,w,h):
+		super().__init__(0,0,w,h,media.blueBlocks)
 		self.exists = False
 		self.moving = False
 	def pickup(self):
@@ -87,7 +87,7 @@ class Player(Actor):
 		for o in obstructions:
 			if collisions.rectangles(self,o):
 				return False
-		if self.y < 0 or self.x < 0 or self.y + self.h > gameH or self.x + self.w > gameW:
+		if self.y < 0 or self.x < 0 or self.y + self.h > gameH or self.x + self.w > gameIW:
 			return False
 		return True
 	def pos(self):
@@ -128,7 +128,11 @@ class Level(object):
 	def load(self):
 		pass
 
-levels = [0,0,0,"""the levels"""]
+levels = [0,0,0,
+		Level((10,520),(500,0,200,200),
+			[[Material(100,50),Material(100,50),Material(100,50),Material(100,50)],
+			[],[]])
+]
 
 def titleScreen():
 	ctx.fill(media.greyBG)
@@ -140,31 +144,23 @@ def titleScreen():
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
 
-	fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
-	fpsRECT = fps.get_rect()
-	ctx.blit(fps,(5,0))
-
 def instructions():
 	ctx.fill(media.greyBG)
 	title, titleRECT = media.centeredText("Instructions", 60, media.blueOG, gameW)
 	titleRECT.top = titleRECT.height/2 +10
 	ctx.blit(title,titleRECT)
     
-	title, titleRECT = media.centeredText("1. Drag and drop objects to build your environment", 30, media.blueOG,gameW)
-	titleRECT.top = gameH/2 - titleRECT.height/2 -100
-	ctx.blit(title,titleRECT)
-    
-	title, titleRECT = media.centeredText("2. Hit GO to start moving", 30, media.blueOG, gameW)
-	titleRECT.top = gameH/2 - titleRECT.height/2 -50
-	ctx.blit(title,titleRECT)
-    
-	title, titleRECT = media.centeredText("3.Use wasd to move and space to jump", 30, media.blueOG, gameW)    
-	titleRECT.top = gameH/2 - titleRECT.height/2 -0
-	ctx.blit(title,titleRECT)    
+	instructionsList = ["1. Drag and drop objects to build your environment",
+						"2. Hit GO to start moving",
+						"3. Use wasd to move and space to jump",
+						"4. Reach the goal zone to improve your sad life"]
 
-	title, titleRECT = media.centeredText("4.Reach the goal zone to improve your sad life", 30,media.blueOG, gameW)
-	titleRECT.top = gameH/2 - titleRECT.height/2 +50
-	ctx.blit(title,titleRECT)
+	iList = 0
+	for heightChange in range(50,-150,-50):
+		title, titleRECT = media.centeredText(instructionsList[iList], 30, media.blueOG, gameW)
+		titleRECT.top = gameH/2 - titleRECT.height/2 - heightChange
+		ctx.blit(title,titleRECT)
+		iList += 1
     
 	title, titleRECT = media.centeredText("click anywhere to continue", 30, media.blueOG, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
@@ -184,7 +180,7 @@ def levelSelect():
 obstructions = [Entity(0,580,900,20,media.blueBlocks)]
 returnButton = Selection(725,25,150,80,media.blueBlocks,2)
 materialButton = Selection(750,300,100,50,(0,105,207),-1)
-block = Material(100,50,media.blueBlocks)
+block = Material(100,50)
 
 def level():
 	ctx.fill(media.greyBG)
@@ -207,7 +203,6 @@ def level():
 	ctx.blit(text,textRect)
 
 	block.go()
-
 	daniel.go()
 	
 	#level 1 specifics
@@ -249,12 +244,10 @@ def main():
 				for p in presets:
 					if event.key == presets[p]:
 						controls[p] = True
-						print("it turned on")
 			elif event.type == pygame.KEYUP:
 				for p in presets:
 					if event.key == presets[p]:
 						controls[p] = False
-
 
 		# SCREEN CHANGING
 		if mouse['click']:
@@ -279,6 +272,11 @@ def main():
 			levelSelect()
 		else:
 			level()
+
+		# DEBUG
+		fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
+		fpsRECT = fps.get_rect()
+		ctx.blit(fps,(5,0))
 
 		pygame.display.update()
 		clock.tick(60)
