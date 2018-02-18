@@ -2,7 +2,10 @@ import pygame, math, random
 import media
 pygame.init()
 
+global gameW, gameH, mouse, screenid
 gameW, gameH = 900, 600
+mouse = {'pos':pygame.mouse.get_pos(),'click':False,'held':False}
+screenid = 0
 
 ctx = pygame.display.set_mode((gameW,gameH))
 pygame.display.set_caption("Albert")
@@ -90,7 +93,7 @@ def instructions():
 	title, titleRECT = media.centeredText("click anywhere to continue on living your sad life", 30, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
-def levelselection():
+def levelSelect():
     pass
 def level(screenid):
 	ctx.fill((236,236,236))
@@ -103,23 +106,35 @@ def close():
 	quit()
 
 def main():
-	screenid = 0
+	global screenid
 	while True:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				close()
+		info = pygame.mouse.get_pressed()
+		if info[0] == True:
+			if mouse['held'] == False:
+				mouse['click'] = True
+				mouse['held'] = True
+			else:
+				mouse['click'] = False
+		else:
+			mouse['click'] = False
+			mouse['held'] = False
+		mouse['pos'] = pygame.mouse.get_pos()
+
+		if mouse['click']:
+			if screenid < 2:
+				screenid += 1
+
 		if screenid == 0:
 			titleScreen()
-			if pygame.mouse.get_pressed()[0]:
-				screenid = 1
 		elif screenid == 1:
 			instructions()
-			if pygame.mouse.get_pressed()[0]:
-				screenid = 3
-		elif screenid == 2:
-			screenid = levelselection()
-		elif screenid == 3:            
-			level(1)
+		#elif screenid == 2:
+		#	levelSelect()
+		else:
+			level(screenid)
 		pygame.display.update()
 		clock.tick(10)
 main()
