@@ -126,12 +126,8 @@ def level():
 
 	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600))
 	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
-<<<<<<< HEAD
-=======
 	returnButton.go();
->>>>>>> 4a087955973b41a5345db23b01efb3180eceef2a
 	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
-	pygame.draw.rect(ctx,(0,65,128),(725,25,150,80))
 	text, textRect = media.centeredText("Select Level", 20, (206,206,206), 150)
 	textRect.left += 725
 	textRect.top = 25 + 40 - textRect.h/2
