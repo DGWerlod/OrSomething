@@ -1,5 +1,5 @@
 import pygame, math, random
-import media, collisions
+import media
 pygame.init()
 
 global gameW, gameH, mouse, screenid
