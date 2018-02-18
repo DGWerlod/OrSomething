@@ -77,7 +77,7 @@ class Level(object):
 levels = [0,0,0,"""the levels"""]
 
 def titleScreen():
-	ctx.fill((30,144,255))    
+	ctx.fill(media.blueOG)    
 	title, titleRECT = media.centeredText("ALBERT THE INTIMIDATING", 60, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2
 	ctx.blit(title,titleRECT)
@@ -91,7 +91,7 @@ def titleScreen():
 	ctx.blit(fps,(5,0))
 
 def instructions():
-	ctx.fill((30,144,255))
+	ctx.fill(blueOG)
 	title, titleRECT = media.centeredText("Instructions", 60, gameW)
 	titleRECT.top = titleRECT.height/2 +10
 	ctx.blit(title,titleRECT)
@@ -112,7 +112,7 @@ def instructions():
 	ctx.blit(title,titleRECT)
     
 def levelSelect():
-	ctx.fill((236, 236, 236))
+	ctx.fill(greyBG)
 	levelNum = 1
 	for l in levelRects:
 		l.draw()
