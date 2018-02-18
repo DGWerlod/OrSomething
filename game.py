@@ -37,9 +37,15 @@ class Goal(Entity):
 		pygame.draw.rect(ctx,self.color,(self.x,self.y,self.w,self.h),2)
 
 class Selection(Entity):
-	def  __init__(self,x,y,w,h,color,selectionID):
+	def  __init__(self,x,y,w,h,color,selectionID,strokeWidth=0):
 		super().__init__(x,y,w,h,color)
 		self.selectionID = selectionID
+		self.strokeWidth = strokeWidth
+	def draw(self):
+		if self.strokeWidth > 0:
+			pygame.draw.rect(ctx,self.color,(self.x,self.y,self.w,self.h),self.strokeWidth)
+		else:
+			super().draw()
 
 class Material(Entity):
 	def __init__(self,w,h):
@@ -125,14 +131,14 @@ class Player(Actor):
 	def draw(self):
 		ctx.blit(self.img[self.level],(self.x,self.y))
 
-levelRects = [Selection(25,25,250,175,media.darkGrey,3),
-				Selection(325,25,250,175,media.darkGrey,4),
-				Selection(625,25,250,175,media.darkGrey,5)]
-instructionButton = Selection(200,325,500,175,media.darkGrey,6)
+levelRects = [Selection(25,25,250,175,media.blueOG,3,2),
+				Selection(325,25,250,175,media.blueOG,4,2),
+				Selection(625,25,250,175,media.blueOG,5,2)]
+instructionButton = Selection(200,325,500,175,media.blueOG,6,2)
 returnButton = Selection(725,25,150,80,media.darkBlue,2)
-materialButtons = [Selection(725,225,100,50,media.mediumBlue,0),
-					Selection(725,300,50,50,media.mediumBlue,1),
-					Selection(725,375,25,50,media.mediumBlue,2)]
+materialButtons = [Selection(725,200,100,50,media.mediumBlue,0),
+					Selection(725,275,50,50,media.mediumBlue,1),
+					Selection(725,350,25,50,media.mediumBlue,2)]
 goButton = Selection(725,475,150,80,media.mediumBlue,-1)
 
 goalLocation = Goal(0,0,30,60,media.blueOG)
@@ -241,10 +247,10 @@ def level():
 		mb.go()
    
 	if(inConstruction):
-		text, textRect = media.centeredText("GO", 50,  media.lightGrey, 150)
+		text, textRect = media.centeredText("GO", 50, media.lightGrey, 150)
 	else:
-		text, textRect = media.centeredText("STOP", 50,  media.lightGrey, 150)
-	textRect.left += 730-2 
+		text, textRect = media.centeredText("STOP", 50, media.lightGrey, 150)
+	textRect.left += 730-5 
 	textRect.top = 475 + 35 - textRect.h/2
 	ctx.blit(text,textRect)
 
@@ -256,19 +262,19 @@ def level():
 	daniel.go()
 
 	# COUNTERS
-	text, textRect = media.centeredText("x" + str(len(materials[0])), 30,  media.mediumBlue, 50)
-	textRect.left += 825 
-	textRect.top = 225 + 35-2 - textRect.h/2
+	text, textRect = media.centeredText("x" + str(len(materials[0])), 30, media.mediumBlue, 50)
+	textRect.right += 825 + 5
+	textRect.top = 200 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
 	text, textRect = media.centeredText("x" + str(len(materials[1])), 30, media.mediumBlue, 50)
-	textRect.left += 825 
-	textRect.top = 300 + 35-2 - textRect.h/2
+	textRect.right += 825 + 5
+	textRect.top = 275 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
 	text, textRect = media.centeredText("x" + str(len(materials[2])), 30, media.mediumBlue, 50)
-	textRect.left += 825 
-	textRect.top = 375 + 35-2 - textRect.h/2
+	textRect.right += 825 + 5
+	textRect.top = 350 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
 	if collisions.rectangles(goalLocation,daniel):
