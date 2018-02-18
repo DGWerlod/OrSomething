@@ -85,6 +85,10 @@ class Player(Actor):
 		for o in obstructions:
 			if collisions.rectangles(self,o):
 				return False
+		for u in usedMaterials:
+			for uu in u:
+				if collisions.rectangles(self,uu):
+					return False
 		if self.y < 0 or self.x < 0 or self.y + self.h > gameH or self.x + self.w > gameIW:
 			return False
 		return True
@@ -117,9 +121,9 @@ levelRects = [Selection(100,100,300,150,media.blueOG,3),
 				Selection(500,100,300,150,media.blueOG,5),
 				Selection(500,350,300,150,media.blueOG,6)]
 returnButton = Selection(725,25,150,80,media.blueBlocks,2)
-materialButtons = [Selection(750,225,100,50,(0,105,207),0),
-					Selection(750,300,50,50,(0,105,207),1),
-					Selection(750,375,25,50,(0,105,207),2)]
+materialButtons = [Selection(725,225,100,50,(0,105,207),0),
+					Selection(725,300,50,50,(0,105,207),1),
+					Selection(725,375,25,50,(0,105,207),2)]
 
 global obstructions, materials, usedMaterials
 obstructions = []
@@ -224,17 +228,17 @@ def level():
 	daniel.go()
 
 	#level 1 specifics
-	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
+	text, textRect = media.centeredText("x" + str(len(materials[0])), 30, (30,144,255), 50)
 	textRect.left += 825 
 	textRect.top = 225 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
-	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
+	text, textRect = media.centeredText("x" + str(len(materials[1])), 30, (30,144,255), 50)
 	textRect.left += 825 
 	textRect.top = 300 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
-	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
+	text, textRect = media.centeredText("x"+ str(len(materials[2])), 30, (30,144,255), 50)
 	textRect.left += 825 
 	textRect.top = 375 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
@@ -296,7 +300,7 @@ def main():
 							materials[mb.selectionID].remove(materials[mb.selectionID][0])
 							
 						else:
-							#print("NO MORE OF ID " + str(mb.selectionID))
+							pass #print("NO MORE OF ID " + str(mb.selectionID))
 				for u in usedMaterials:
 					for uu in u:
 						if collisions.pointRect(mouse['pos'],uu):
