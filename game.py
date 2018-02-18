@@ -183,7 +183,9 @@ def levelSelect():
 
 obstructions = [Entity(0,580,900,20,media.blueBlocks)]
 returnButton = Selection(725,25,150,80,media.blueBlocks,2)
-materialButton = Selection(750,300,100,50,(0,105,207),-1)
+materialButton = Selection(750,225,100,50,(0,105,207),-1)
+materialButton1 = Selection(750,300,50,50,(0,105,207),-1)
+materialButton2 = Selection(750,375,25,50,(0,105,207),-1)
 block = Material(100,50,media.blueBlocks)
 
 def level():
@@ -201,6 +203,9 @@ def level():
 
 	pygame.draw.rect(ctx,(30,144,255),(725,475,150,80))
 	materialButton.go()
+	materialButton1.go()
+	materialButton2.go()
+    
 	text, textRect = media.centeredText("GO", 50, (206,206,206), 150)
 	textRect.left += 730-2 
 	textRect.top = 475 + 35 - textRect.h/2
@@ -211,12 +216,21 @@ def level():
 	daniel.go()
 	
 	#level 1 specifics
-	pygame.draw.rect(ctx,(0,105,207),(750,300,100,50))
 	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
 	textRect.left += 805 
 	textRect.top = 300 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
-	
+    
+	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
+	textRect.left += 805 
+	textRect.top = 300 + 35-2 - textRect.h/2
+	ctx.blit(text,textRect)
+    
+	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
+	textRect.left += 805 
+	textRect.top = 300 + 35-2 - textRect.h/2
+	ctx.blit(text,textRect)
+    
 	#if(mouse['held'] && collisions.pointRect(mouse['pos'],materialButton):
 	#material is set to exist and be moving
 
