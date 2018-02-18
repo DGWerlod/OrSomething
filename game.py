@@ -56,19 +56,15 @@ class Room(object):
 		pass
 
 def titleScreen():
-	ctx.fill((30,144,255))
-	title = media.muli.render("ALBERT THE INTIMIDATING",True,(31,31,31))
-	titleRECT = title.get_rect()
+	ctx.fill((30,144,255))    
+	title, titleRECT = media.centeredText("ALBERT THE INTIMIDATING", 60, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2
-	titleRECT.left = gameW/2 - titleRECT.width/2
 	ctx.blit(title,titleRECT)
 
-	subtitle = media.mulismall.render("click anywhere to continue",True,(31,31,31))
-	subtitleRECT = subtitle.get_rect()
-	subtitleRECT.top = gameH/2 + titleRECT.height/2
-	subtitleRECT.left = gameW/2 - subtitleRECT.width/2 
-	ctx.blit(subtitle,subtitleRECT)
-	
+	title, titleRECT = media.centeredText("click anywhere to continue", 30, gameW)
+	titleRECT.top = gameH/2 - titleRECT.height/2 -200
+	ctx.blit(title,titleRECT)
+
 	fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
 	fpsRECT = fps.get_rect()
 	ctx.blit(fps,(5,0))
@@ -78,21 +74,31 @@ def instructions():
 	title, titleRECT = media.centeredText("Instructions", 60, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -200
 	ctx.blit(title,titleRECT)
-
-    
-    
-'''Instructions:
-- WASD to move
-- Space to jump
-- Drag and drop objects to build your environment
-- Reach the goal zone to improve your sad life
-'''
+	title, titleRECT = media.centeredText("wasd to move", 30, gameW)
+	titleRECT.top = gameH/2 - titleRECT.height/2 -100
+	ctx.blit(title,titleRECT)
+	title, titleRECT = media.centeredText("space to jump", 30, gameW)
+	titleRECT.top = gameH/2 - titleRECT.height/2 -50
+	ctx.blit(title,titleRECT)
+	title, titleRECT = media.centeredText("Drag and drop objects to build your environment", 30, gameW)
+	titleRECT.top = gameH/2 - titleRECT.height/2 -0
+	ctx.blit(title,titleRECT)
+	title, titleRECT = media.centeredText("Reach the goal zone to improve your sad life", 30, gameW)
+	titleRECT.top = gameH/2 - titleRECT.height/2 +50
+	ctx.blit(title,titleRECT)
+	title, titleRECT = media.centeredText("click anywhere to continue on living your sad life", 30, gameW)
+	titleRECT.top = gameH/2 - titleRECT.height/2 +200
+	ctx.blit(title,titleRECT)
+def levelselection():
+    pass
+def level(screenid):
+	ctx.fill((236,236,236))
+	anEntity = Entity(13,10,10,10,(0,0,0)) 
+	anEntity.go()
 
 def close():
 	pygame.quit()
 	quit()
-
-anEntity = Entity(13,10,10,10,(0,0,0))
 
 def main():
 	screenid = 0
@@ -100,15 +106,18 @@ def main():
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				close()
-		"""ctx.fill((236,236,236))
-		anEntity.go()"""
 		if screenid == 0:
 			titleScreen()
 			if pygame.mouse.get_pressed()[0]:
-				screenid = 1				
+				screenid = 1
 		elif screenid == 1:
 			instructions()
-			
+			if pygame.mouse.get_pressed()[0]:
+				screenid = 3
+		elif screenid == 2:
+			screenid = levelselection()
+		elif screenid == 3:            
+			level(1)
 		pygame.display.update()
 		clock.tick(60)
 main()
