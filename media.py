@@ -62,6 +62,7 @@ purpledark = (76,0,76)
 # THE ACTUAL COLORS WE'RE USING THAT AREN'T FILLERS
 
 blueOG = (30,144,255)
-blueBlocks = (0,65,128)
-greyText = (31,31,31)
-greyBG = (236,236,236)
+mediumBlue = (0,105,207)
+darkBlue = (0,65,128)
+lightGrey = (236,236,236)
+darkGrey =(206,206,206)

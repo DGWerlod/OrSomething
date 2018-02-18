@@ -43,7 +43,7 @@ class Selection(Entity):
 
 class Material(Entity):
 	def __init__(self,w,h):
-		super().__init__(0,0,w,h,media.blueBlocks)
+		super().__init__(0,0,w,h,media.mediumBlue)
 		self.exists = False
 		self.moving = False
 	def pickup(self):
@@ -125,15 +125,15 @@ class Player(Actor):
 	def draw(self):
 		ctx.blit(self.img[self.level],(self.x,self.y))
 
-levelRects = [Selection(25,25,250,175,media.blueOG,3),
-				Selection(325,25,250,175,media.blueOG,4),
-				Selection(625,25,250,175,media.blueOG,5)]
-instructionButton = Selection(250,325,400,275,media.blueOG,6)
-returnButton = Selection(725,25,150,80,media.blueBlocks,2)
-materialButtons = [Selection(725,225,100,50,(0,105,207),0),
-					Selection(725,300,50,50,(0,105,207),1),
-					Selection(725,375,25,50,(0,105,207),2)]
-goButton = Selection(725,475,150,80,(30,144,255),-1)
+levelRects = [Selection(25,25,250,175,media.darkGrey,3),
+				Selection(325,25,250,175,media.darkGrey,4),
+				Selection(625,25,250,175,media.darkGrey,5)]
+instructionButton = Selection(200,325,500,175,media.darkGrey,6)
+returnButton = Selection(725,25,150,80,media.darkBlue,2)
+materialButtons = [Selection(725,225,100,50,media.mediumBlue,0),
+					Selection(725,300,50,50,media.mediumBlue,1),
+					Selection(725,375,25,50,media.mediumBlue,2)]
+goButton = Selection(725,475,150,80,media.mediumBlue,-1)
 
 goalLocation = Goal(0,0,30,60,media.blueOG)
 global obstructions, materials, usedMaterials
@@ -162,22 +162,22 @@ class Level(object):
 
 levels = [0,0,0, # first 3 empty indeces to comply with opening screens
 		Level((10,520),(660,10),
-			[Entity(0,580,900,20,media.blueBlocks)],
+			[Entity(0,580,900,20,media.darkBlue)],
 			[[Material(100,50),Material(100,50),Material(100,50),Material(100,50)],
 			[],[]]),
 		Level((10,520),(660,10),
-			[Entity(0,580,900,20,media.blueBlocks)],
+			[Entity(0,580,900,20,media.darkBlue)],
 			[[Material(100,50)],
 			[Material(50,50),Material(50,50)],[Material(25,50)]]),
 		Level((10,520),(660,10),
-			[Entity(0,580,900,20,media.blueBlocks)],
+			[Entity(0,580,900,20,media.darkBlue)],
 			[[],[],[Material(25,50),Material(25,50),Material(25,50),Material(25,50)]]),
 ]
 
 def titleScreen():
-	ctx.fill(media.greyBG)
+	ctx.fill(media.lightGrey)
 	title, titleRECT = media.centeredText("ALBERT", 60, media.blueOG, gameW)
-	titleRECT.top = gameH/2 - titleRECT.height/2
+	titleRECT.top = gameH/2 - titleRECT.height/2 -40
 	ctx.blit(title,titleRECT)
 
 	title, titleRECT = media.centeredText("click anywhere to continue", 30, media.blueOG,gameW)
@@ -185,7 +185,7 @@ def titleScreen():
 	ctx.blit(title,titleRECT)
 
 def instructions():
-	ctx.fill(media.greyBG)
+	ctx.fill(media.lightGrey)
 	title, titleRECT = media.centeredText("Instructions", 60, media.blueOG, gameW)
 	titleRECT.top = titleRECT.height/2 +10
 	ctx.blit(title,titleRECT)
@@ -207,27 +207,31 @@ def instructions():
 	ctx.blit(title,titleRECT)
 
 def levelSelect():
-	ctx.fill(media.greyBG)
+	ctx.fill(media.lightGrey)
 	levelNum = 1
 	for l in levelRects:
 		l.go()
-		text, textRect = media.centeredText("Level " + str(levelNum), 50, (31,31,31),300)
+		text, textRect = media.centeredText("Level " + str(levelNum), 50,  media.blueOG,250)
 		textRect.left += l.x
 		textRect.top = l.y + l.h/2 - textRect.h/2 - 5 #-5 aesthetic
 		ctx.blit(text,textRect)
 		levelNum += 1
 	instructionButton.go()
-
+	text, textRect = media.centeredText("Return to Instructions", 30,  media.blueOG, 500)
+	textRect.left += 200
+	textRect.top = 325 + 100 - textRect.h/2 - 10 #-5 aesthetic
+	ctx.blit(text,textRect)   
+    
 def level():
-	ctx.fill(media.greyBG)
-	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600)) # right panel
+	ctx.fill(media.lightGrey)
+	pygame.draw.rect(ctx, media.darkGrey,(700,0,200,600)) # right panel
 
 	for o in obstructions:
 		o.go()
 
 	returnButton.go()
 
-	text, textRect = media.centeredText("Select Level", 20, (206,206,206), 150)
+	text, textRect = media.centeredText("Select Level", 20, media.lightGrey, 150)
 	textRect.left += 725
 	textRect.top = 25 + 40 - textRect.h/2
 	ctx.blit(text,textRect)
@@ -235,8 +239,11 @@ def level():
 	goButton.go()
 	for mb in materialButtons:
 		mb.go()
-    
-	text, textRect = media.centeredText("GO", 50, (206,206,206), 150)
+   
+	if(inConstruction):
+		text, textRect = media.centeredText("GO", 50,  media.lightGrey, 150)
+	else:
+		text, textRect = media.centeredText("STOP", 50,  media.lightGrey, 150)
 	textRect.left += 730-2 
 	textRect.top = 475 + 35 - textRect.h/2
 	ctx.blit(text,textRect)
@@ -249,17 +256,17 @@ def level():
 	daniel.go()
 
 	# COUNTERS
-	text, textRect = media.centeredText("x" + str(len(materials[0])), 30, (30,144,255), 50)
+	text, textRect = media.centeredText("x" + str(len(materials[0])), 30,  media.mediumBlue, 50)
 	textRect.left += 825 
 	textRect.top = 225 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
-	text, textRect = media.centeredText("x" + str(len(materials[1])), 30, (30,144,255), 50)
+	text, textRect = media.centeredText("x" + str(len(materials[1])), 30, media.mediumBlue, 50)
 	textRect.left += 825 
 	textRect.top = 300 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
-	text, textRect = media.centeredText("x" + str(len(materials[2])), 30, (30,144,255), 50)
+	text, textRect = media.centeredText("x" + str(len(materials[2])), 30, media.mediumBlue, 50)
 	textRect.left += 825 
 	textRect.top = 375 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
@@ -348,9 +355,9 @@ def main():
 			level()
 
 		# DEBUG
-		fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
+		"""fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
 		fpsRECT = fps.get_rect()
-		ctx.blit(fps,(5,0))
+		ctx.blit(fps,(5,0))"""
 
 		pygame.display.update()
 		clock.tick(60)
