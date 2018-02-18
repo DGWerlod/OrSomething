@@ -125,10 +125,10 @@ class Player(Actor):
 	def draw(self):
 		ctx.blit(self.img[self.level],(self.x,self.y))
 
-levelRects = [Selection(100,100,300,150,media.blueOG,3),
-				Selection(100,350,300,150,media.blueOG,4),
-				Selection(500,100,300,150,media.blueOG,5),
-				Selection(500,350,300,150,media.blueOG,6)]
+levelRects = [Selection(25,25,250,175,media.blueOG,3),
+				Selection(325,25,250,175,media.blueOG,4),
+				Selection(625,25,250,175,media.blueOG,5)]
+instructionButton = Selection(250,325,400,275,media.blueOG,6)
 returnButton = Selection(725,25,150,80,media.blueBlocks,2)
 materialButtons = [Selection(725,225,100,50,(0,105,207),0),
 					Selection(725,300,50,50,(0,105,207),1),
@@ -210,12 +210,13 @@ def levelSelect():
 	ctx.fill(media.greyBG)
 	levelNum = 1
 	for l in levelRects:
-		l.draw()
+		l.go()
 		text, textRect = media.centeredText("Level " + str(levelNum), 50, (31,31,31),300)
 		textRect.left += l.x
 		textRect.top = l.y + l.h/2 - textRect.h/2 - 5 #-5 aesthetic
 		ctx.blit(text,textRect)
 		levelNum += 1
+	instructionButton.go()
 
 def level():
 	ctx.fill(media.greyBG)
@@ -308,26 +309,30 @@ def main():
 			elif screenid == 2:
 				for l in levelRects:
 					if collisions.pointRect(mouse['pos'],l):
+						inConstruction = True
 						screenid = l.selectionID
 						levels[screenid].load()
+				if collisions.pointRect(mouse['pos'],instructionButton):
+					screenid -= 1
 			else:
 				if collisions.pointRect(mouse['pos'],returnButton):
 					screenid = 2
-				for mb in materialButtons:
-					if collisions.pointRect(mouse['pos'],mb):
-						if len(materials[mb.selectionID]) != 0:
-							materials[mb.selectionID][0].pickup()
-							usedMaterials[mb.selectionID].append(materials[mb.selectionID][0])
-							materials[mb.selectionID].remove(materials[mb.selectionID][0])
-							
-						else:
-							pass #print("NO MORE OF ID " + str(mb.selectionID))
-				for u in usedMaterials:
-					for uu in u:
-						if collisions.pointRect(mouse['pos'],uu):
-							uu.exists = False
-							materials[usedMaterials.index(u)].append(uu)
-							u.remove(uu)
+				if inConstruction:
+					for mb in materialButtons:
+						if collisions.pointRect(mouse['pos'],mb):
+							if len(materials[mb.selectionID]) != 0:
+								materials[mb.selectionID][0].pickup()
+								usedMaterials[mb.selectionID].append(materials[mb.selectionID][0])
+								materials[mb.selectionID].remove(materials[mb.selectionID][0])
+								
+							else:
+								pass #print("NO MORE OF ID " + str(mb.selectionID))
+					for u in usedMaterials:
+						for uu in u:
+							if collisions.pointRect(mouse['pos'],uu):
+								uu.exists = False
+								materials[usedMaterials.index(u)].append(uu)
+								u.remove(uu)
 				if collisions.pointRect(mouse['pos'], goButton):
 					inConstruction = not inConstruction
 					daniel.x = levels[screenid].start[0]
