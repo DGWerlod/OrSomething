@@ -1,4 +1,5 @@
 import pygame, math, random
+import media
 pygame.init()
 
 gameW = 900
@@ -18,7 +19,7 @@ class Entity(object):
 	def pos(self):
 		pass
 	def draw(self):
-		pygame.draw.rect(ctx,color,(self.x,self.y,self.w,self.h))
+		pygame.draw.rect(ctx,self.color,(self.x,self.y,self.w,self.h))
 	def go(self):
 		self.pos()
 		self.draw()
@@ -57,12 +58,12 @@ class Room(object):
 
 def titleScreen():
 	ctx.fill((30,144,255))
-	title = media.muli.render(str(round(player.hp)),True,(31,31,31))
-	titleRect = score.get_rect()
-	scoreRECT.right = gameW - 5
-	scoreRECT.top = gameH - gameIH
-	ctx.blit(score,scoreRECT)
-	fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,colors.black)
+	title = media.muli.render("ALBERT THE INTIMIDATING",True,(31,31,31))
+	titleRECT = title.get_rect()
+	titleRECT.top = gameH/2 - titleRECT.height/2
+	titleRECT.left = gameW/2 - titleRECT.width/2
+	ctx.blit(title,titleRECT)
+	fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
 	fpsRECT = fps.get_rect()
 	ctx.blit(fps,(5,0))
 
@@ -78,8 +79,9 @@ def main():
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				close()
-		ctx.fill((236,236,236))
-		anEntity.go()
+		"""ctx.fill((236,236,236))
+		anEntity.go()"""
+		titleScreen()
 		pygame.display.update()
 		clock.tick(60)
 main()
