@@ -68,14 +68,11 @@ def titleScreen():
 	subtitleRECT.top = gameH/2 + titleRECT.height/2
 	subtitleRECT.left = gameW/2 - subtitleRECT.width/2 
 	ctx.blit(subtitle,subtitleRECT)
-    
+	
 	fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
 	fpsRECT = fps.get_rect()
 	ctx.blit(fps,(5,0))
-    
 
-
-<<<<<<< HEAD
 def instructions():
 	ctx.fill((30,144,255))
 	title = media.muli.render("Instructions",True,(31,31,31))
@@ -84,8 +81,6 @@ def instructions():
 	titleRECT.left = gameW/2 - titleRECT.width/2
 	ctx.blit(title,titleRECT)
 
-=======
->>>>>>> b0cecfa6a5e7f17fabe1493b720da3548dd711d2
 def close():
 	pygame.quit()
 	quit()
@@ -103,10 +98,10 @@ def main():
 		if screenid == 0:
 			titleScreen()
 			if pygame.mouse.get_pressed()[0]:
-				screenid = 1                
+				screenid = 1				
 		elif screenid == 1:
 			instructions()
-            
+			
 		pygame.display.update()
 		clock.tick(60)
 main()
