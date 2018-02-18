@@ -121,9 +121,18 @@ def levelSelect():
     
 def level():
 	ctx.fill((236,236,236))
-	daniel.draw()
 	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600))
 	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
+	pygame.draw.rect(ctx,(0,65,128),(725,25,150,80))
+	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
+	text, textRect = media.centeredText("Select Level", 20, (206,206,206), 150)
+	textRect.left += 725 
+	textRect.top = 25 + 40 - textRect.h/2
+	ctx.blit(text,textRect)
+	daniel.draw()
+
+
+
 
 def close():
 	pygame.quit()
