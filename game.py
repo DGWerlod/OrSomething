@@ -1,5 +1,5 @@
 import pygame, math, random
-import media
+import media, collisions
 pygame.init()
 
 global gameW, gameH, mouse, screenid
@@ -58,7 +58,7 @@ levelRects = [Entity(100,100,300,150,media.blueOG),
 				Entity(500,350,300,150,media.blueOG)]
 daniel= Player(10, 520, 30, 60, media.playerBody, 0)
 
-class Room(object):
+class Level(object):
 	def __init__(self,start,goal,materials):
 		self.start = start
 		self.goal = goal
@@ -112,12 +112,10 @@ def levelSelect():
 		ctx.blit(text,textRect)
 		levelNum += 1
     
-def level(screenid):
+def level():
 	ctx.fill((236,236,236))
 	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
 	daniel.draw()
-
-
 
 def close():
 	pygame.quit()
@@ -144,6 +142,11 @@ def main():
 		if mouse['click']:
 			if screenid < 2:
 				screenid += 1
+			elif screenid == 2:
+				for l in levelRects:
+					if collisions.pointRect(mouse['pos'],l):
+						levels[].load()
+
 
 		if screenid == 0:
 			titleScreen()
@@ -152,7 +155,8 @@ def main():
 		elif screenid == 2:
 			levelSelect()
 		else:
-			level(screenid)
+			level()
+
 		pygame.display.update()
 		clock.tick(10)
 main()
