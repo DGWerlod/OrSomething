@@ -26,6 +26,11 @@ class Entity(object):
 		self.pos()
 		self.draw()
 
+class Selection(Entity):
+	def  __init__(self,x,y,w,h,color,levelID):
+		super().__init__(x,y,w,h,color)
+		self.levelID = levelID
+
 class Material(Entity):
 	def __init__(self,w,h,color):
 		super().__init__(0,0,w,h,color)
@@ -52,24 +57,21 @@ class Player(Entity):
 	def draw(self):
 		ctx.blit(self.img[self.level],(self.x,self.y))
 
-levelRects = [Entity(100,100,300,150,media.blueOG),
-				Entity(100,350,300,150,media.blueOG),
-				Entity(500,100,300,150,media.blueOG),
-				Entity(500,350,300,150,media.blueOG)]
+levelRects = [Selection(100,100,300,150,media.blueOG,3),
+				Selection(100,350,300,150,media.blueOG,4),
+				Selection(500,100,300,150,media.blueOG,5),
+				Selection(500,350,300,150,media.blueOG,6)]
 daniel= Player(10, 520, 30, 60, media.playerBody, 0)
 
-<<<<<<< HEAD
 class Level(object):
-=======
-
-class Room(object):
->>>>>>> 0c36da1c3ee29630b1392a1f271b7f18e01a06ac
 	def __init__(self,start,goal,materials):
 		self.start = start
 		self.goal = goal
 		self.materials = materials
 	def load(self):
 		pass
+
+levels = [0,0,0,"""the levels"""]
 
 def titleScreen():
 	ctx.fill((30,144,255))    
@@ -120,11 +122,8 @@ def levelSelect():
 def level():
 	ctx.fill((236,236,236))
 	daniel.draw()
-<<<<<<< HEAD
-=======
 	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600))
 	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
->>>>>>> 0c36da1c3ee29630b1392a1f271b7f18e01a06ac
 
 def close():
 	pygame.quit()
@@ -154,7 +153,7 @@ def main():
 			elif screenid == 2:
 				for l in levelRects:
 					if collisions.pointRect(mouse['pos'],l):
-						levels[].load()
+						levels[l.levelID].load()
 
 
 		if screenid == 0:
