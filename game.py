@@ -2,8 +2,11 @@ import pygame, math, random
 import media, collisions
 pygame.init()
 
-global gameW, gameH, mouse, screenid
+global gameW, gameH, presets, controls, mouse, screenid
+
 gameW, gameH = 900, 600
+presets = {'keyW':pygame.K_w,'keyA':pygame.K_a,'keyS':pygame.K_s,'keyD':pygame.K_d,'keySpace':pygame.K_SPACE}
+controls = {'keyW':False,'keyA':False,'keyS':False,'keyD':False,'keySpace':False}
 mouse = {'pos':pygame.mouse.get_pos(),'click':False,'held':False}
 screenid = 0
 
