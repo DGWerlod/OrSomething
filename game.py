@@ -36,6 +36,7 @@ class Material(Entity):
 	def __init__(self,w,h,color):
 		super().__init__(0,0,w,h,color)
 		self.exists = False
+        self.moving = False
 	def place(x, y):
 		self.exists = True
 		self.x = x
@@ -44,6 +45,8 @@ class Material(Entity):
 		self.exists = False
 	def go():
 		if self.exists:
+			if self.moving:
+				self.place(mouse['pos'][0],mouse['pos'][1])
 			self.draw()
 
 class Actor(Entity):
@@ -80,13 +83,13 @@ class Level(object):
 levels = [0,0,0,"""the levels"""]
 
 def titleScreen():
-	ctx.fill((236,236,236))    
-	title, titleRECT = media.centeredText("ALBERT THE INTIMIDATING", 60, (30,144,255), gameW)
+	ctx.fill(media.blueOG)    
+	title, titleRECT = media.centeredText("ALBERT THE INTIMIDATING", 60, (31,31,31), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2
 	ctx.blit(title,titleRECT)
 
-	title, titleRECT = media.centeredText("click anywhere to continue", 30, (30,144,255),gameW)
-	titleRECT.top = gameH/2 - titleRECT.height/2 + 200
+	title, titleRECT = media.centeredText("click anywhere to continue", 30, (31,31,31),gameW)
+	titleRECT.top = gameH/2 - titleRECT.height/2 -200
 	ctx.blit(title,titleRECT)
 
 	fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
@@ -94,23 +97,23 @@ def titleScreen():
 	ctx.blit(fps,(5,0))
 
 def instructions():
-	ctx.fill (media.greyBG)
-	title, titleRECT = media.centeredText("Instructions", 60,(30,144,255), gameW)
+	ctx.fill(media.blueOG)
+	title, titleRECT = media.centeredText("Instructions", 60,(31,31,31), gameW)
 	titleRECT.top = titleRECT.height/2 +10
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("1. Drag and drop objects to build your environment", 30,(30,144,255), gameW)
+	title, titleRECT = media.centeredText("wasd to move", 30,(31,31,31), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -100
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("2. Select GO to start moving", 30,(30,144,255), gameW)
+	title, titleRECT = media.centeredText("space to jump", 30,(31,31,31), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -50
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("3. use wasd to move and space to jump", 30, (30,144,255),gameW)
+	title, titleRECT = media.centeredText("Drag and drop objects to build your environment", 30, (31,31,31),gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -0
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("4. Reach the goal zone to improve your sad life", 30,(30,144,255), gameW)
+	title, titleRECT = media.centeredText("Reach the goal zone to improve your sad life", 30,(31,31,31), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +50
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("click anywhere to continue", 30,(30,144,255), gameW)
+	title, titleRECT = media.centeredText("click anywhere to continue on living your sad life", 30,(31,31,31), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
     
@@ -126,19 +129,19 @@ def levelSelect():
 		levelNum += 1
     
 returnButton = Selection(725,25,150,80,media.blueBlocks,2)
-
+materialButton = Selection(750,300,100,50,(0,105,207),-1)
 def level():
 	ctx.fill(media.greyBG)
 
 	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600))
 	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
-	returnButton.go();
+	returnButton.go()
 	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
 	text, textRect = media.centeredText("Select Level", 20, (206,206,206), 150)
 	textRect.left += 725
 	textRect.top = 25 + 40 - textRect.h/2
 	ctx.blit(text,textRect)
-	pygame.draw.rect(ctx,(30,144,255),(725,475,150,80))
+	materialButton.go()
 	text, textRect = media.centeredText("GO", 50, (206,206,206), 150)
 	textRect.left += 730-2 
 	textRect.top = 475 + 35 - textRect.h/2
@@ -151,7 +154,12 @@ def level():
 	textRect.left += 805 
 	textRect.top = 300 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
-
+    
+	if(mouse['held'] && collisions.pointRect(mouse['pos'],materialButton):
+#material is set to exist and be moving
+       
+       
+        
 
 def close():
 	pygame.quit()
