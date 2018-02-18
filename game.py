@@ -63,10 +63,26 @@ def titleScreen():
 	titleRECT.top = gameH/2 - titleRECT.height/2
 	titleRECT.left = gameW/2 - titleRECT.width/2
 	ctx.blit(title,titleRECT)
+
+	subtitle = media.mulismall.render("click anywhere to continue",True,(31,31,31))
+	subtitleRECT = subtitle.get_rect()
+	subtitleRECT.top = gameH/2 + titleRECT.height/2
+	subtitleRECT.left = gameW/2 - subtitleRECT.width/2 
+	ctx.blit(subtitle,subtitleRECT)
+    
 	fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
 	fpsRECT = fps.get_rect()
 	ctx.blit(fps,(5,0))
+    
 
+
+def instructions():
+	ctx.fill((30,144,255))
+	title = media.muli.render("Instructions",True,(31,31,31))
+	titleRECT = title.get_rect()
+	titleRECT.top = gameH/2 - titleRECT.height/2
+	titleRECT.left = gameW/2 - titleRECT.width/2
+	ctx.blit(title,titleRECT)
 
 def close():
 	pygame.quit()
@@ -75,13 +91,20 @@ def close():
 anEntity = Entity(13,10,10,10,(0,0,0))
 
 def main():
+	screenid = 0
 	while True:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				close()
 		"""ctx.fill((236,236,236))
 		anEntity.go()"""
-		titleScreen()
+		if screenid == 0:
+			titleScreen()
+			if pygame.mouse.get_pressed()[0]:
+				screenid = 1                
+		elif screenid == 1:
+			instructions()
+            
 		pygame.display.update()
 		clock.tick(60)
 main()
