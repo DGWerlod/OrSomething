@@ -79,10 +79,6 @@ def titleScreen():
 
 def instructions():
 	ctx.fill((30,144,255))
-	title = media.muli.render("Instructions",True,(31,31,31))
-	titleRECT = title.get_rect()
-	titleRECT.top = gameH/2 - titleRECT.height/2
-	titleRECT.left = gameW/2 - titleRECT.width/2
 	ctx.blit(title,titleRECT)
 
 def close():

@@ -13,8 +13,6 @@ playerBody = [pygame.image.load("img/basic.png"),
 
 def centeredText(rawText,size,widthOfParent):
 	font = pygame.font.Font("fonts/muli.ttf",size)
-	text = media.muli.render(rawText,True,(31,31,31))
-	textRect = title.get_rect()
 	textRect.left = widthOfParent/2 - textRect.width/2
 	return text, textRect
 
