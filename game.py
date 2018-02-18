@@ -98,19 +98,19 @@ def instructions():
 	title, titleRECT = media.centeredText("Instructions", 60,(30,144,255), gameW)
 	titleRECT.top = titleRECT.height/2 +10
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("wasd to move", 30,(30,144,255), gameW)
+	title, titleRECT = media.centeredText("1. Drag and drop objects to build your environment", 30,(30,144,255), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -100
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("space to jump", 30,(30,144,255), gameW)
+	title, titleRECT = media.centeredText("2. Select GO to start moving", 30,(30,144,255), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -50
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("Drag and drop objects to build your environment", 30, (30,144,255),gameW)
+	title, titleRECT = media.centeredText("3. use wasd to move and space to jump", 30, (30,144,255),gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -0
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("Reach the goal zone to improve your sad life", 30,(30,144,255), gameW)
+	title, titleRECT = media.centeredText("4. Reach the goal zone to improve your sad life", 30,(30,144,255), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +50
 	ctx.blit(title,titleRECT)
-	title, titleRECT = media.centeredText("click anywhere to continue on living your sad life", 31,(30,144,255), gameW)
+	title, titleRECT = media.centeredText("click anywhere to continue", 30,(30,144,255), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
     
