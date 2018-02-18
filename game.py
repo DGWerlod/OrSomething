@@ -77,6 +77,9 @@ def titleScreen():
 
 def instructions():
 	ctx.fill((30,144,255))
+	title, titleRECT = media.centeredText("Instructions", 60, gameW)
+	titleRECT.top = titleRECT.height/2 +10
+	ctx.blit(title,titleRECT)
 	title, titleRECT = media.centeredText("wasd to move", 30, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -100
 	ctx.blit(title,titleRECT)
@@ -94,14 +97,17 @@ def instructions():
 	ctx.blit(title,titleRECT)
     
 def levelSelect():
-	pass
-
+	ctx.fill((236, 236, 236))
+	pygame.draw.rect(ctx, (30,144,255),(100,100,300,150))
+	pygame.draw.rect(ctx, (30,144,255),(100, 350, 300,150))
+	pygame.draw.rect(ctx, (30,144,255),(500,100,300,150))
+	pygame.draw.rect(ctx, (30,144,255),(500,350,300,150))
+    
 def level(screenid):
 	ctx.fill((236,236,236))
 	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
 	daniel.draw()
-	anEntity = Entity(13,10,10,10,(0,0,0)) 
-	anEntity.go()
+
 
 
 def close():
@@ -134,8 +140,8 @@ def main():
 			titleScreen()
 		elif screenid == 1:
 			instructions()
-		#elif screenid == 2:
-		#	levelSelect()
+		elif screenid == 2:
+			levelSelect()
 		else:
 			level(screenid)
 		pygame.display.update()
