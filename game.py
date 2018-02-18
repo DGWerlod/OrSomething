@@ -95,8 +95,11 @@ class Player(Actor):
 		self.img = img
 		self.level = level
 	def canMove(self):
+		global inConstruction
 		if inConstruction:
 			return False
+		if  self.y + self.h > gameH:
+			inConstruction = True
 		for o in obstructions:
 			if collisions.rectangles(self,o):
 				return False
@@ -104,7 +107,7 @@ class Player(Actor):
 			for uu in u:
 				if collisions.rectangles(self,uu):
 					return False
-		if self.y < 0 or self.x < 0 or self.y + self.h > gameH or self.x + self.w > gameIW:
+		if self.y < 0 or self.x < 0 or self.x + self.w > gameIW:
 			return False
 		return True
 	def pos(self):
@@ -133,8 +136,11 @@ class Player(Actor):
 
 levelRects = [Selection(25,25,250,175,media.blueOG,3,2),
 				Selection(325,25,250,175,media.blueOG,4,2),
-				Selection(625,25,250,175,media.blueOG,5,2)]
-instructionButton = Selection(200,325,500,175,media.blueOG,6,2)
+				Selection(625,25,250,175,media.blueOG,5,2),
+				Selection(25,225,250,175,media.blueOG,6,2),
+				Selection(325,225,250,175,media.blueOG,7,2),
+				Selection(625,225,250,175,media.blueOG,8,2)]
+instructionButton = Selection(200,425,500,150,media.blueOG,9,2)
 returnButton = Selection(725,25,150,80,media.darkBlue,2)
 materialButtons = [Selection(725,200,100,50,media.mediumBlue,0),
 					Selection(725,275,50,50,media.mediumBlue,1),
@@ -172,12 +178,21 @@ levels = [0,0,0, # first 3 empty indeces to comply with opening screens
 			[[Material(100,50),Material(100,50),Material(100,50),Material(100,50)],
 			[],[]]),
 		Level((10,520),(660,10),
-			[Entity(0,580,900,20,media.darkBlue)],
+			[Entity(0,580,900,20,media.darkBlue),Entity(345,80,10,520,media.darkBlue)],
 			[[Material(100,50)],
 			[Material(50,50),Material(50,50)],[Material(25,50)]]),
 		Level((10,520),(660,10),
-			[Entity(0,580,900,20,media.darkBlue)],
-			[[],[],[Material(25,50),Material(25,50),Material(25,50),Material(25,50)]]),
+			[Entity(0,580,900,20,media.darkBlue),Entity(195,150,10,450,media.darkBlue),Entity(395,0,10,450,media.darkBlue)],
+			[[],[Material(50,50)],[Material(25,50),Material(25,50),Material(25,50),Material(25,50)]]),
+		Level((10,520),(660,10),
+			[Entity(0,580,900,20,media.darkBlue),Entity(195,150,10,450,media.darkBlue),Entity(395,0,10,450,media.darkBlue)],
+			[[],[Material(50,50)],[Material(25,50),Material(25,50),Material(25,50),Material(25,50)]]),
+		Level((10,520),(660,10),
+			[Entity(0,580,900,20,media.darkBlue),Entity(195,150,10,450,media.darkBlue),Entity(395,0,10,450,media.darkBlue)],
+			[[],[Material(50,50)],[Material(25,50),Material(25,50),Material(25,50),Material(25,50)]]),
+		Level((10,520),(660,10),
+			[Entity(0,580,900,20,media.darkBlue),Entity(195,150,10,450,media.darkBlue),Entity(395,0,10,450,media.darkBlue)],
+			[[],[Material(50,50)],[Material(25,50),Material(25,50),Material(25,50),Material(25,50)]]),
 ]
 
 def titleScreen():
@@ -186,7 +201,7 @@ def titleScreen():
 	titleRECT.top = gameH/2 - titleRECT.height/2 -40
 	ctx.blit(title,titleRECT)
 
-	title, titleRECT = media.centeredText("click anywhere to continue", 30, media.blueOG,gameW)
+	title, titleRECT = media.centeredText("Click anywhere to continue", 30, media.blueOG,gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
 
@@ -198,7 +213,7 @@ def instructions():
     
 	instructionsList = ["1. Drag and drop objects to build your environment",
 						"2. Hit GO to start moving",
-						"3. Use wasd to move and space to jump",
+						"3. Use WASD to move and Space to jump",
 						"4. Reach the goal zone to improve your sad life"]
 
 	iList = 0
@@ -208,7 +223,7 @@ def instructions():
 		ctx.blit(title,titleRECT)
 		iList += 1
     
-	title, titleRECT = media.centeredText("click anywhere to continue", 30, media.blueOG, gameW)
+	title, titleRECT = media.centeredText("Click anywhere to continue", 30, media.blueOG, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
 
@@ -225,7 +240,7 @@ def levelSelect():
 	instructionButton.go()
 	text, textRect = media.centeredText("Return to Instructions", 30,  media.blueOG, 500)
 	textRect.left += 200
-	textRect.top = 325 + 100 - textRect.h/2 - 10 #-5 aesthetic
+	textRect.top = 425 + 75 - textRect.h/2 - 5 #-5 aesthetic
 	ctx.blit(text,textRect)   
     
 def level():
