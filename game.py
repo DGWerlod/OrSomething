@@ -53,6 +53,7 @@ class Player(Entity):
 		ctx.blit(self.img[self.level],(self.x,self.y))
 daniel= Player(10, 520, 30, 60, media.playerBody, 0)
 
+
 class Room(object):
 	def __init__(self,start,goal,materials):
 		self.start = start
@@ -109,10 +110,9 @@ def levelSelect():
     
 def level(screenid):
 	ctx.fill((236,236,236))
-	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
 	daniel.draw()
-
-
+	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600))
+	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
 
 def close():
 	pygame.quit()
@@ -138,7 +138,6 @@ def main():
 
 		if mouse['click']:
 			if screenid < 2:
-				screenid += 1
 
 		if screenid == 0:
 			titleScreen()
