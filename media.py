@@ -9,8 +9,8 @@ mulismall = pygame.font.Font("fonts/muli.ttf",15)
 
 def centeredText(rawText,size,widthOfParent):
 	font = pygame.font.Font("fonts/muli.ttf",size)
-	text = media.muli.render(rawText,True,(31,31,31))
-	textRect = title.get_rect()
+	text = font.render(rawText,True,(31,31,31))
+	textRect = text.get_rect()
 	textRect.left = widthOfParent/2 - textRect.width/2
 	return text, textRect
 

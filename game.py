@@ -75,11 +75,18 @@ def titleScreen():
 
 def instructions():
 	ctx.fill((30,144,255))
-	title = media.muli.render("Instructions",True,(31,31,31))
-	titleRECT = title.get_rect()
-	titleRECT.top = gameH/2 - titleRECT.height/2
-	titleRECT.left = gameW/2 - titleRECT.width/2
+	title, titleRECT = media.centeredText("Instructions", 60, gameW)
+	titleRECT.top = gameH/2 - titleRECT.height/2 -200
 	ctx.blit(title,titleRECT)
+
+    
+    
+'''Instructions:
+- WASD to move
+- Space to jump
+- Drag and drop objects to build your environment
+- Reach the goal zone to improve your sad life
+'''
 
 def close():
 	pygame.quit()
