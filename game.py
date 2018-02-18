@@ -58,7 +58,12 @@ levelRects = [Entity(100,100,300,150,media.blueOG),
 				Entity(500,350,300,150,media.blueOG)]
 daniel= Player(10, 520, 30, 60, media.playerBody, 0)
 
+<<<<<<< HEAD
 class Level(object):
+=======
+
+class Room(object):
+>>>>>>> 0c36da1c3ee29630b1392a1f271b7f18e01a06ac
 	def __init__(self,start,goal,materials):
 		self.start = start
 		self.goal = goal
@@ -114,8 +119,12 @@ def levelSelect():
     
 def level():
 	ctx.fill((236,236,236))
-	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
 	daniel.draw()
+<<<<<<< HEAD
+=======
+	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600))
+	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
+>>>>>>> 0c36da1c3ee29630b1392a1f271b7f18e01a06ac
 
 def close():
 	pygame.quit()
