@@ -6,6 +6,7 @@ global gameW, gameH, mouse, screenid
 gameW, gameH = 900, 600
 mouse = {'pos':pygame.mouse.get_pos(),'click':False,'held':False}
 screenid = 0
+gravity = 0.75
 
 ctx = pygame.display.set_mode((gameW,gameH))
 pygame.display.set_caption("Albert")
@@ -45,7 +46,12 @@ class Material(Entity):
 		if self.exists:
 			self.draw()
 
-class Enemy(Entity):
+class Actor(Entity):
+	def __init__(self,x,y,w,h,color,spd):
+		super().__init__(x,y,w,h,color)
+		self.spd = spd
+
+class Enemy(Actor):
 	def __init__(self):
 		pass
 
@@ -119,7 +125,7 @@ def levelSelect():
 		ctx.blit(text,textRect)
 		levelNum += 1
     
-returnButton = Selection(725,25,150,80,media.greyBG,2)
+returnButton = Selection(725,25,150,80,media.blueBlocks,2)
 
 def level():
 	ctx.fill(media.greyBG)
