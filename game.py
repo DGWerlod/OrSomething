@@ -2,13 +2,14 @@ import pygame, math, random, copy
 import media, collisions
 pygame.init()
 
-global gameW, gameH, gameIW, presets, controls, mouse, screenid
+global gameW, gameH, gameIW, presets, controls, mouse, screenid, inConstruction
 gameW, gameH, gameIW = 900, 600, 700
 presets = {'keyW':pygame.K_w,'keyA':pygame.K_a,'keyS':pygame.K_s,'keyD':pygame.K_d,'keySpace':pygame.K_SPACE}
 controls = {'keyW':False,'keyA':False,'keyS':False,'keyD':False,'keySpace':False}
 mouse = {'pos':pygame.mouse.get_pos(),'click':False,'held':False}
 screenid = 0
 gravity = 0.75
+inConstruction = True
 
 ctx = pygame.display.set_mode((gameW,gameH))
 pygame.display.set_caption("Albert")
@@ -88,6 +89,8 @@ class Player(Actor):
 		self.img = img
 		self.level = level
 	def canMove(self):
+		if inConstruction:
+			return False
 		for o in obstructions:
 			if collisions.rectangles(self,o):
 				return False
@@ -130,6 +133,7 @@ returnButton = Selection(725,25,150,80,media.blueBlocks,2)
 materialButtons = [Selection(725,225,100,50,(0,105,207),0),
 					Selection(725,300,50,50,(0,105,207),1),
 					Selection(725,375,25,50,(0,105,207),2)]
+goButton = Selection(725,475,150,80,(30,144,255),-1)
 
 goalLocation = Goal(0,0,30,60,media.blueOG)
 global obstructions, materials, usedMaterials
@@ -227,7 +231,7 @@ def level():
 	textRect.top = 25 + 40 - textRect.h/2
 	ctx.blit(text,textRect)
 
-	pygame.draw.rect(ctx,(30,144,255),(725,475,150,80))
+	goButton.go()
 	for mb in materialButtons:
 		mb.go()
     
@@ -268,7 +272,7 @@ def close():
 	quit()
 
 def main():
-	global screenid
+	global screenid, inConstruction
 	while True:
 
 		# EVENT HANDLING
@@ -324,7 +328,11 @@ def main():
 							uu.exists = False
 							materials[usedMaterials.index(u)].append(uu)
 							u.remove(uu)
-
+				if collisions.pointRect(mouse['pos'], goButton):
+					inConstruction = not inConstruction
+					daniel.x = levels[screenid].start[0]
+					daniel.y = levels[screenid].start[1]
+                
 		if screenid == 0:
 			titleScreen()
 		elif screenid == 1:
