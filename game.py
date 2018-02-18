@@ -38,7 +38,7 @@ class Material(Entity):
 	def __init__(self,w,h,color):
 		super().__init__(0,0,w,h,color)
 		self.exists = False
-        self.moving = False
+		self.moving = False
 	def place(x, y):
 		self.exists = True
 		self.x = x
@@ -132,7 +132,7 @@ class Level(object):
 levels = [0,0,0,"""the levels"""]
 
 def titleScreen():
-	ctx.fill(media.blueOG)    
+	ctx.fill(media.blueOG)	
 	title, titleRECT = media.centeredText("ALBERT THE INTIMIDATING", 60, (31,31,31), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2
 	ctx.blit(title,titleRECT)
@@ -165,7 +165,7 @@ def instructions():
 	title, titleRECT = media.centeredText("click anywhere to continue on living your sad life", 30,(31,31,31), gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
-    
+	
 def levelSelect():
 	ctx.fill(media.greyBG)
 	levelNum = 1
@@ -180,51 +180,38 @@ def levelSelect():
 obstructions = [Entity(0,580,900,20,media.blueBlocks)]
 returnButton = Selection(725,25,150,80,media.blueBlocks,2)
 materialButton = Selection(750,300,100,50,(0,105,207),-1)
+
 def level():
 	ctx.fill(media.greyBG)
-<<<<<<< HEAD
 	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600)) # right panel
 	
 	for o in obstructions:
 		o.go()
 	returnButton.go();
 
-=======
-
-	pygame.draw.rect(ctx,(206,206,206),(700,0,200,600))
-	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
-	returnButton.go()
-	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
->>>>>>> 72639d9d68d2971b9e57f11da1d67c2ef99ceb5b
 	text, textRect = media.centeredText("Select Level", 20, (206,206,206), 150)
 	textRect.left += 725
 	textRect.top = 25 + 40 - textRect.h/2
 	ctx.blit(text,textRect)
-<<<<<<< HEAD
 
 	pygame.draw.rect(ctx,(30,144,255),(725,475,150,80))
-=======
 	materialButton.go()
->>>>>>> 72639d9d68d2971b9e57f11da1d67c2ef99ceb5b
 	text, textRect = media.centeredText("GO", 50, (206,206,206), 150)
 	textRect.left += 730-2 
 	textRect.top = 475 + 35 - textRect.h/2
 	ctx.blit(text,textRect)
 
 	daniel.go()
-    
-    #level 1 specifics
+	
+	#level 1 specifics
 	pygame.draw.rect(ctx,(0,105,207),(750,300,100,50))
 	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
 	textRect.left += 805 
 	textRect.top = 300 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
-    
-	if(mouse['held'] && collisions.pointRect(mouse['pos'],materialButton):
-#material is set to exist and be moving
-       
-       
-        
+	
+	#if(mouse['held'] && collisions.pointRect(mouse['pos'],materialButton):
+	#material is set to exist and be moving
 
 def close():
 	pygame.quit()
