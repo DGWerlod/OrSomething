@@ -121,6 +121,7 @@ materialButtons = [Selection(750,225,100,50,(0,105,207),0),
 					Selection(750,300,50,50,(0,105,207),1),
 					Selection(750,375,25,50,(0,105,207),2)]
 
+goalLocation = Entity(0,0,30,60,media.blueOG)
 global obstructions, materials, usedMaterials
 obstructions = []
 materials = [[],[],[]]
@@ -137,6 +138,8 @@ class Level(object):
 	def load(self):
 		daniel.x = self.start[0]
 		daniel.y = self.start[1]
+		goalLocation.x = self.goal[0]
+		goalLocation.y = self.goal[1]
 
 		global obstructions, materials, usedMaterials
 		obstructions = self.obstructions
@@ -145,7 +148,7 @@ class Level(object):
 
 
 levels = [0,0,0,
-		Level((10,520),(500,0,200,200),
+		Level((10,520),(660,10),
 			[Entity(0,580,900,20,media.blueBlocks)],
 			[[Material(100,50),Material(100,50),Material(100,50),Material(100,50)],
 			[],[]])
