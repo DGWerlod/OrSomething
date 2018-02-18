@@ -82,14 +82,11 @@ class Player(Actor):
 		self.img = img
 		self.level = level
 	def canMove(self):
-		"""for o in obstructions:
-			if collisions.rectangles(self,o,ballR):
+		for o in obstructions:
+			if collisions.rectangles(self,o):
 				return False
-		for e in enemies:
-			if collisions.rectangles(self,e,ballR):
-				return False
-		if self.y - ballR < 0 or self.x < 0 or self.y + self.h > gameH - gameIH or self.x + self.w > gameW:
-			return False"""
+		if self.y < 0 or self.x < 0 or self.y + self.h > gameH or self.x + self.w > gameW:
+			return False
 		return True
 	def pos(self):
 		if controls['keyA'] == True:
@@ -227,9 +224,6 @@ def main():
 	while True:
 
 		# EVENT HANDLING
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				close()
 		info = pygame.mouse.get_pressed()
 		if info[0] == True:
 			if mouse['held'] == False:
@@ -250,6 +244,7 @@ def main():
 				for p in presets:
 					if event.key == presets[p]:
 						controls[p] = True
+						print("it turned on")
 			elif event.type == pygame.KEYUP:
 				for p in presets:
 					if event.key == presets[p]:
@@ -265,6 +260,7 @@ def main():
 					if collisions.pointRect(mouse['pos'],l):
 						#levels[l.levelID].load()
 						screenid += 1
+						daniel.y = 300
 			elif collisions.pointRect(mouse['pos'],returnButton):
 				screenid = 2
 
