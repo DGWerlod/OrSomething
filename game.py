@@ -46,19 +46,18 @@ class Enemy(Entity):
 
 class Player(Entity):
 	def __init__(self,x,y,w,h,img,level):
-		super().__init__(x,y,w,h,media.blue)
+		super().__init__(x,y,w,h,media.blueOG)
 		self.img = img
 		self.level = level
 	def draw(self):
-		ctx.blit(self.img[level],(self.x,self.y,self.w,self.h))
-
+		ctx.blit(self.img[self.level],(self.x,self.y))
+daniel= Player(10, 520, 30, 60, media.playerBody, 0)
 
 class Room(object):
-	def __init__(self,start,goal,materials,enemies):
+	def __init__(self,start,goal,materials):
 		self.start = start
 		self.goal = goal
 		self.materials = materials
-		self.enemies = enemies
 	def load(self):
 		pass
 
@@ -93,10 +92,14 @@ def instructions():
 	title, titleRECT = media.centeredText("click anywhere to continue on living your sad life", 30, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
+    
 def levelSelect():
-    pass
+	pass
+
 def level(screenid):
 	ctx.fill((236,236,236))
+	pygame.draw.rect(ctx,(0,65,128),(0,580,900,20))
+	daniel.draw()
 	anEntity = Entity(13,10,10,10,(0,0,0)) 
 	anEntity.go()
 
