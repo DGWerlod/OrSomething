@@ -1,4 +1,4 @@
-import pygame, math, random
+import pygame, math, random, copy
 import media, collisions
 pygame.init()
 
@@ -28,6 +28,12 @@ class Entity(object):
 	def go(self):
 		self.pos()
 		self.draw()
+
+class Goal(Entity):
+	def  __init__(self,x,y,w,h,color):
+		super().__init__(x,y,w,h,color)
+	def draw(self):
+		pygame.draw.rect(ctx,self.color,(self.x,self.y,self.w,self.h),2)
 
 class Selection(Entity):
 	def  __init__(self,x,y,w,h,color,selectionID):
@@ -125,7 +131,7 @@ materialButtons = [Selection(725,225,100,50,(0,105,207),0),
 					Selection(725,300,50,50,(0,105,207),1),
 					Selection(725,375,25,50,(0,105,207),2)]
 
-goalLocation = Entity(0,0,30,60,media.blueOG)
+goalLocation = Goal(0,0,30,60,media.blueOG)
 global obstructions, materials, usedMaterials
 obstructions = []
 materials = [[],[],[]]
@@ -146,16 +152,22 @@ class Level(object):
 		goalLocation.y = self.goal[1]
 
 		global obstructions, materials, usedMaterials
-		obstructions = self.obstructions
-		materials = self.materials
+		obstructions = copy.deepcopy(self.obstructions)
+		materials = copy.deepcopy(self.materials)
 		usedMaterials = [[],[],[]]
 
-
-levels = [0,0,0,
+levels = [0,0,0, # first 3 empty indeces to comply with opening screens
 		Level((10,520),(660,10),
 			[Entity(0,580,900,20,media.blueBlocks)],
 			[[Material(100,50),Material(100,50),Material(100,50),Material(100,50)],
-			[],[]])
+			[],[]]),
+		Level((10,520),(660,10),
+			[Entity(0,580,900,20,media.blueBlocks)],
+			[[Material(100,50)],
+			[Material(50,50),Material(50,50)],[Material(25,50)]]),
+		Level((10,520),(660,10),
+			[Entity(0,580,900,20,media.blueBlocks)],
+			[[],[],[Material(25,50),Material(25,50),Material(25,50),Material(25,50)]]),
 ]
 
 def titleScreen():
@@ -228,9 +240,10 @@ def level():
 		for uu in u:
 			uu.go()
 
+	goalLocation.go()
 	daniel.go()
 
-	#level 1 specifics
+	# COUNTERS
 	text, textRect = media.centeredText("x" + str(len(materials[0])), 30, (30,144,255), 50)
 	textRect.left += 825 
 	textRect.top = 225 + 35-2 - textRect.h/2
@@ -241,13 +254,14 @@ def level():
 	textRect.top = 300 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
-	text, textRect = media.centeredText("x"+ str(len(materials[2])), 30, (30,144,255), 50)
+	text, textRect = media.centeredText("x" + str(len(materials[2])), 30, (30,144,255), 50)
 	textRect.left += 825 
 	textRect.top = 375 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
-	#if(mouse['held'] && collisions.pointRect(mouse['pos'],materialButton):
-	#material is set to exist and be moving
+	if collisions.rectangles(goalLocation,daniel):
+		global screenid
+		screenid = 2
 
 def close():
 	pygame.quit()
@@ -290,8 +304,8 @@ def main():
 			elif screenid == 2:
 				for l in levelRects:
 					if collisions.pointRect(mouse['pos'],l):
-						levels[l.selectionID].load()
-						screenid += 1
+						screenid = l.selectionID
+						levels[screenid].load()
 			else:
 				if collisions.pointRect(mouse['pos'],returnButton):
 					screenid = 2
