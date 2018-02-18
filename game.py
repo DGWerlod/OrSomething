@@ -2,8 +2,6 @@ import pygame, math, random
 import media
 pygame.init()
 
-gameW = 900
-gameH = 600
 
 ctx = pygame.display.set_mode((gameW,gameH))
 pygame.display.set_caption("Albert")
@@ -76,6 +74,7 @@ def titleScreen():
     
 
 
+<<<<<<< HEAD
 def instructions():
 	ctx.fill((30,144,255))
 	title = media.muli.render("Instructions",True,(31,31,31))
@@ -84,6 +83,8 @@ def instructions():
 	titleRECT.left = gameW/2 - titleRECT.width/2
 	ctx.blit(title,titleRECT)
 
+=======
+>>>>>>> b0cecfa6a5e7f17fabe1493b720da3548dd711d2
 def close():
 	pygame.quit()
 	quit()
