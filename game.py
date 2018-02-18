@@ -225,18 +225,18 @@ def level():
 
 	#level 1 specifics
 	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
-	textRect.left += 805 
+	textRect.left += 825 
+	textRect.top = 225 + 35-2 - textRect.h/2
+	ctx.blit(text,textRect)
+    
+	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
+	textRect.left += 825 
 	textRect.top = 300 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
 	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
-	textRect.left += 805 
-	textRect.top = 300 + 35-2 - textRect.h/2
-	ctx.blit(text,textRect)
-    
-	text, textRect = media.centeredText("x4", 30, (30,144,255), 50)
-	textRect.left += 805 
-	textRect.top = 300 + 35-2 - textRect.h/2
+	textRect.left += 825 
+	textRect.top = 375 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
     
 	#if(mouse['held'] && collisions.pointRect(mouse['pos'],materialButton):
