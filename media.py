@@ -19,6 +19,7 @@ def centeredText(rawText,size,color,widthOfParent):
 
 # IMAGES
 
+background = pygame.image.load("img/background.png")
 playerBody = [pygame.image.load("img/basic.png"),
 			pygame.image.load("img/lessBasic.png"),
 			pygame.image.load("img/leastBasic.png"),]

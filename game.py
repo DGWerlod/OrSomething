@@ -1,6 +1,6 @@
 # IMPORTS
 import pygame, math, random, copy
-import media, collisions
+import media, collisions, text
 pygame.init()
 
 # GLOBAL VAR SETUP
@@ -226,50 +226,27 @@ def pickupMaterial(selectionID):
 	materials[selectionID][0].moving = True
 	usedMaterials[selectionID].append(materials[selectionID][0])
 	materials[selectionID].remove(materials[selectionID][0])
+	text.refreshCounter(selectionID, len(materials[selectionID]))
 
 def resetMaterial(material):
 	material.exists = False
 	materials[material.type].append(material)
 	usedMaterials[material.type].remove(material)
+	text.refreshCounter(material.type, len(materials[material.type]))
 
 # SCREEN TYPE FUNCTIONS
 
 def titleScreen():
-	# HEADER
 	ctx.fill(media.lightGrey)
-	title, titleRECT = media.centeredText("In Construction", 60, media.blueOG, gameW)
-	titleRECT.top = gameH/2 - titleRECT.height/2 -40
-	ctx.blit(title,titleRECT)
-
-	# FOOTER
-	title, titleRECT = media.centeredText("Click anywhere to continue", 30, media.blueOG,gameW)
-	titleRECT.top = gameH/2 - titleRECT.height/2 +200
-	ctx.blit(title,titleRECT)
+	ctx.blit(text.title,text.titleRECT)
+	ctx.blit(text.footer,text.footerRECT)
 
 def instructions():
 	ctx.fill(media.lightGrey)
-
-	# HEADER
-	title, titleRECT = media.centeredText("Instructions", 60, media.blueOG, gameW)
-	titleRECT.top = titleRECT.height/2 +10
-	ctx.blit(title,titleRECT)
-    
-    # CONTENT
-	iList = 0
-	instructionsList = ["1. Drag and drop objects to build your environment",
-						"2. Hit GO to start moving",
-						"3. Use WASD to move and Space to jump",
-						"4. Reach the goal zone to improve your sad life"]
-	for heightChange in range(50,-150,-50):
-		title, titleRECT = media.centeredText(instructionsList[iList], 30, media.blueOG, gameW)
-		titleRECT.top = gameH/2 - titleRECT.height/2 - heightChange
-		ctx.blit(title,titleRECT)
-		iList += 1
-    
-    # FOOTER
-	title, titleRECT = media.centeredText("Click anywhere to continue", 30, media.blueOG, gameW)
-	titleRECT.top = gameH/2 - titleRECT.height/2 +200
-	ctx.blit(title,titleRECT)
+	ctx.blit(text.instructionsHeader,text.instructionsHeaderRECT)
+	for l in text.instructions:
+		ctx.blit(l[0],l[1])
+	ctx.blit(text.footer,text.footerRECT)
 
 def levelSelect():
 	ctx.fill(media.lightGrey)
@@ -293,7 +270,8 @@ def levelSelect():
     
 def level():
 	# BACKGROUNDS
-	ctx.fill(media.lightGrey)
+	#ctx.fill(media.lightGrey)
+	ctx.blit(media.background, (0,0))
 	pygame.draw.rect(ctx, media.darkGrey,(700,0,200,600))
 
 	# BUTTONS
@@ -303,34 +281,32 @@ def level():
 		mb.go()
 
 	# BUTTON TEXT
-	text, textRect = media.centeredText("Select Level", 20, media.lightGrey, 150)
-	textRect.left += 725
-	textRect.top = 25 + 40 - textRect.h/2
-	ctx.blit(text,textRect)
+	ctx.blit(text.returnToLevels,text.returnToLevelsRECT)
 
 	if(inConstruction):
-		text, textRect = media.centeredText("GO", 50, media.lightGrey, 150)
+		ctx.blit(text.goButton,text.goButtonRECT)
 	else:
-		text, textRect = media.centeredText("STOP", 50, media.lightGrey, 150)
-	textRect.left += 730-5 
-	textRect.top = 475 + 35 - textRect.h/2
-	ctx.blit(text,textRect)
+		ctx.blit(text.stopButton,text.stopButtonRECT)
 
 	# COUNTERS
-	text, textRect = media.centeredText("x" + str(len(materials[0])), 30, media.mediumBlue, 50)
-	textRect.right += 825 + 5
-	textRect.top = 200 + 35-2 - textRect.h/2
-	ctx.blit(text,textRect)
+	for c in text.counters:
+		ctx.blit(c[0],c[1])
+	"""
+	counterLong, counterLongRect = media.centeredText("x" + str(len(materials[0])), 30, media.mediumBlue, 50)
+	counterLongRect.right += 825 + 5
+	counterLongRect.top = 200 + 35-2 - counterLongRect.h/2
+	ctx.blit(counterLong,counterLongRect)
     
-	text, textRect = media.centeredText("x" + str(len(materials[1])), 30, media.mediumBlue, 50)
-	textRect.right += 825 + 5
-	textRect.top = 275 + 35-2 - textRect.h/2
-	ctx.blit(text,textRect)
+	counterMedium, counterMediumRect = media.centeredText("x" + str(len(materials[1])), 30, media.mediumBlue, 50)
+	counterMediumRect.right += 825 + 5
+	counterMediumRect.top = 275 + 35-2 - counterMediumRect.h/2
+	ctx.blit(counterMedium,counterMediumRect)
     
-	text, textRect = media.centeredText("x" + str(len(materials[2])), 30, media.mediumBlue, 50)
-	textRect.right += 825 + 5
-	textRect.top = 350 + 35-2 - textRect.h/2
-	ctx.blit(text,textRect)
+	counterShort, counterShortRect = media.centeredText("x" + str(len(materials[2])), 30, media.mediumBlue, 50)
+	counterShortRect.right += 825 + 5
+	counterShortRect.top = 350 + 35-2 - counterShortRect.h/2
+	ctx.blit(counterShort,counterShortRect)
+	"""
 
 	# OBSTRUCTIONS AND MATERIALS
 	for o in obstructions:
@@ -399,6 +375,8 @@ def main():
 						inConstruction = True
 						screenid = l.selectionID
 						levels[screenid].load()
+						for c in range(0,3):
+							text.refreshCounter(c,len(materials[c]))
 				if collisions.pointRect(mouse['pos'],instructionButton):
 					screenid -= 1
 
@@ -435,9 +413,9 @@ def main():
 			level()
 
 		# DEBUG
-		"""fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
+		fps = media.mulismall.render(str(round(clock.get_fps(),1)),True,media.black)
 		fpsRECT = fps.get_rect()
-		ctx.blit(fps,(5,0))"""
+		ctx.blit(fps,(5,0))
 
 		pygame.display.update()
 		clock.tick(60)
