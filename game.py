@@ -1,7 +1,9 @@
+# IMPORTS
 import pygame, math, random, copy
 import media, collisions
 pygame.init()
 
+# GLOBAL VAR SETUP
 global gameW, gameH, gameIW, presets, controls, mouse, screenid, inConstruction
 gameW, gameH, gameIW = 900, 600, 700
 presets = {'keyW':pygame.K_w,'keyA':pygame.K_a,'keyS':pygame.K_s,'keyD':pygame.K_d,'keySpace':pygame.K_SPACE}
@@ -11,9 +13,12 @@ screenid = 0
 gravity = 0.75
 inConstruction = True
 
+# PYGAME WINDOW SETUP
 ctx = pygame.display.set_mode((gameW,gameH))
 pygame.display.set_caption("Albert")
 clock = pygame.time.Clock()
+
+# CLASSES
 
 class Entity(object):
 	def  __init__(self,x,y,w,h,color):
@@ -48,17 +53,31 @@ class Selection(Entity):
 			super().draw()
 
 class Material(Entity):
-	def __init__(self,w,h):
+	def __init__(self,type):
+		if type == 0:
+			w, h = 100, 50
+		elif type == 1:
+			w, h = 50, 50
+		elif type == 2:
+			w, h = 25, 50
+		else:
+			print("Material type " + str(type) + " does not exist")
 		super().__init__(0,0,w,h,media.mediumBlue)
 		self.exists = False
 		self.moving = False
-	def pickup(self):
-		self.exists = True
-		self.moving = True
+		self.type = type
+	def canPlace(self):
+		for mb in materialButtons:
+			if collisions.rectangles(self,mb):
+				return False
+		return True
 	def go(self):
 		if self.exists:
 			if not mouse['held']:
-				self.moving = False
+				if self.canPlace():
+					self.moving = False
+				else:
+					resetMaterial(self)
 			if self.moving:
 				self.x = mouse['pos'][0]-self.w/2
 				self.y = mouse['pos'][1]-self.h/2
@@ -99,7 +118,7 @@ class Player(Actor):
 		if inConstruction:
 			return False
 		if self.y > gameH:
-			inConstruction =True
+			inConstruction = True
 		for o in obstructions:
 			if collisions.rectangles(self,o):
 				return False
@@ -134,6 +153,8 @@ class Player(Actor):
 	def draw(self):
 		ctx.blit(self.img[self.level],(self.x,self.y))
 
+# STATIC OBJECT SETUP
+
 levelRects = [Selection(25,25,250,175,media.blueOG,3,2),
 				Selection(325,25,250,175,media.blueOG,4,2),
 				Selection(625,25,250,175,media.blueOG,5,2),
@@ -146,6 +167,8 @@ materialButtons = [Selection(725,200,100,50,media.mediumBlue,0),
 					Selection(725,275,50,50,media.mediumBlue,1),
 					Selection(725,350,25,50,media.mediumBlue,2)]
 goButton = Selection(725,475,150,80,media.mediumBlue,-1)
+
+# DYNAMIC OBJECT SETUP
 
 goalLocation = Goal(0,0,30,60,media.blueOG)
 global obstructions, materials, usedMaterials
@@ -172,58 +195,78 @@ class Level(object):
 		materials = copy.deepcopy(self.materials)
 		usedMaterials = [[],[],[]]
 
+# LEVELS ARE BUILT AND ADDED HERE
 levels = [0,0,0, # first 3 empty indeces to comply with opening screens
 		Level((10,520),(660,10),
 			[Entity(0,580,900,20,media.darkBlue)],
-			[[Material(100,50),Material(100,50),Material(100,50),Material(100,50)],
+			[[Material(0),Material(0),Material(0),Material(0)],
 			[],[]]),
 		Level((10,520),(660,10),
 			[Entity(0,580,900,20,media.darkBlue),Entity(345,80,10,520,media.darkBlue)],
-			[[Material(100,50)],
-			[Material(50,50),Material(50,50)],[Material(25,50)]]),
+			[[Material(0)],
+			[Material(1),Material(1)],[Material(2)]]),
 		Level((10,520),(660,10),
 			[Entity(0,580,900,20,media.darkBlue),Entity(195,150,10,450,media.darkBlue),Entity(395,0,10,450,media.darkBlue)],
-			[[],[Material(50,50)],[Material(25,50),Material(25,50),Material(25,50),Material(25,50)]]),
+			[[],[Material(1)],[Material(2),Material(2),Material(2),Material(2)]]),
 		Level((10,520),(660,10),
 			[Entity(0,580,100,20,media.darkBlue),Entity(700,580,200,20,media.darkBlue)],
-			[[],[],[Material(25,50),Material(25,50),Material(25,50),Material(25,50)]]),
+			[[],[],[Material(2),Material(2),Material(2),Material(2)]]),
 		Level((10,520),(660,10),
 			[Entity(0,580,100,20,media.darkBlue),Entity(700,580,200,20,media.darkBlue),Entity(295,300,10,300,media.darkBlue),Entity(395,0,10,450,media.darkBlue)],
-			[[Material(100,50)],[],[Material(25,50),Material(25,50),Material(25,50)]]),
+			[[Material(0)],[],[Material(2),Material(2),Material(2)]]),
 		Level((10,520),(660,10),
 			[Entity(0,580,100,20,media.darkBlue),Entity(700,580,200,20,media.darkBlue),Entity(0,470,300,10,media.darkBlue),],
-			[[],[Material(50,50)],[Material(25,50),Material(25,50),Material(25,50),Material(25,50)]]),
+			[[],[Material(1)],[Material(2),Material(2),Material(2),Material(2)]]),
 ]
 
+# HELPER FUNCTIONS
+
+def pickupMaterial(selectionID):
+	materials[selectionID][0].exists = True
+	materials[selectionID][0].moving = True
+	usedMaterials[selectionID].append(materials[selectionID][0])
+	materials[selectionID].remove(materials[selectionID][0])
+
+def resetMaterial(material):
+	material.exists = False
+	materials[material.type].append(material)
+	usedMaterials[material.type].remove(material)
+
+# SCREEN TYPE FUNCTIONS
 
 def titleScreen():
+	# HEADER
 	ctx.fill(media.lightGrey)
 	title, titleRECT = media.centeredText("In Construction", 60, media.blueOG, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 -40
 	ctx.blit(title,titleRECT)
 
+	# FOOTER
 	title, titleRECT = media.centeredText("Click anywhere to continue", 30, media.blueOG,gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
 
 def instructions():
 	ctx.fill(media.lightGrey)
+
+	# HEADER
 	title, titleRECT = media.centeredText("Instructions", 60, media.blueOG, gameW)
 	titleRECT.top = titleRECT.height/2 +10
 	ctx.blit(title,titleRECT)
     
+    # CONTENT
+	iList = 0
 	instructionsList = ["1. Drag and drop objects to build your environment",
 						"2. Hit GO to start moving",
 						"3. Use WASD to move and Space to jump",
 						"4. Reach the goal zone to improve your sad life"]
-
-	iList = 0
 	for heightChange in range(50,-150,-50):
 		title, titleRECT = media.centeredText(instructionsList[iList], 30, media.blueOG, gameW)
 		titleRECT.top = gameH/2 - titleRECT.height/2 - heightChange
 		ctx.blit(title,titleRECT)
 		iList += 1
     
+    # FOOTER
 	title, titleRECT = media.centeredText("Click anywhere to continue", 30, media.blueOG, gameW)
 	titleRECT.top = gameH/2 - titleRECT.height/2 +200
 	ctx.blit(title,titleRECT)
@@ -231,37 +274,40 @@ def instructions():
 def levelSelect():
 	ctx.fill(media.lightGrey)
 	levelNum = 1
+
+	# LEVEL BUTTONS AND TEXT
 	for l in levelRects:
 		l.go()
 		text, textRect = media.centeredText("Level " + str(levelNum), 50,  media.blueOG,250)
 		textRect.left += l.x
-		textRect.top = l.y + l.h/2 - textRect.h/2 - 5 #-5 aesthetic
+		textRect.top = l.y + l.h/2 - textRect.h/2 - 3 #-3 aesthetic
 		ctx.blit(text,textRect)
 		levelNum += 1
+
+	# RETURN BUTTON AND TEXT
 	instructionButton.go()
 	text, textRect = media.centeredText("Return to Instructions", 30,  media.blueOG, 500)
 	textRect.left += 200
-	textRect.top = 425 + 75 - textRect.h/2 - 5 #-5 aesthetic
+	textRect.top = 425 + 75 - textRect.h/2 - 3 #-3 aesthetic
 	ctx.blit(text,textRect)   
     
 def level():
+	# BACKGROUNDS
 	ctx.fill(media.lightGrey)
-	pygame.draw.rect(ctx, media.darkGrey,(700,0,200,600)) # right panel
+	pygame.draw.rect(ctx, media.darkGrey,(700,0,200,600))
 
-	for o in obstructions:
-		o.go()
-
+	# BUTTONS
 	returnButton.go()
+	goButton.go()
+	for mb in materialButtons:
+		mb.go()
 
+	# BUTTON TEXT
 	text, textRect = media.centeredText("Select Level", 20, media.lightGrey, 150)
 	textRect.left += 725
 	textRect.top = 25 + 40 - textRect.h/2
 	ctx.blit(text,textRect)
 
-	goButton.go()
-	for mb in materialButtons:
-		mb.go()
-   
 	if(inConstruction):
 		text, textRect = media.centeredText("GO", 50, media.lightGrey, 150)
 	else:
@@ -269,13 +315,6 @@ def level():
 	textRect.left += 730-5 
 	textRect.top = 475 + 35 - textRect.h/2
 	ctx.blit(text,textRect)
-
-	for u in usedMaterials:
-		for uu in u:
-			uu.go()
-
-	goalLocation.go()
-	daniel.go()
 
 	# COUNTERS
 	text, textRect = media.centeredText("x" + str(len(materials[0])), 30, media.mediumBlue, 50)
@@ -292,12 +331,26 @@ def level():
 	textRect.right += 825 + 5
 	textRect.top = 350 + 35-2 - textRect.h/2
 	ctx.blit(text,textRect)
+
+	# OBSTRUCTIONS AND MATERIALS
+	for o in obstructions:
+		o.go()
+
+	for u in usedMaterials:
+		for uu in u:
+			uu.go()
+
+	# PLAYER ELEMENTS
+	goalLocation.go()
+	daniel.go()
     
+    # LEVEL COMPLETION
 	if collisions.rectangles(goalLocation,daniel):
 		global screenid
 		screenid = 2
 
 def close():
+	pygame.display.quit() # prevents a rare crashing bug
 	pygame.quit()
 	quit()
 
@@ -305,7 +358,7 @@ def main():
 	global screenid, inConstruction
 	while True:
 
-		# EVENT HANDLING
+		# EVENT HANDLING - MOUSE
 		info = pygame.mouse.get_pressed()
 		if info[0] == True:
 			if mouse['held'] == False:
@@ -319,6 +372,7 @@ def main():
 
 		mouse['pos'] = pygame.mouse.get_pos()
 
+		# EVENT HANDLING - KEYS
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				close()
@@ -331,10 +385,14 @@ def main():
 					if event.key == presets[p]:
 						controls[p] = False
 
-		# SCREEN CHANGING
+		# CLICK ACTIONS
 		if mouse['click']:
+			
+			# INTRO SCREENS
 			if screenid < 2:
 				screenid += 1
+
+			# LEVEL SELECT
 			elif screenid == 2:
 				for l in levelRects:
 					if collisions.pointRect(mouse['pos'],l):
@@ -343,6 +401,8 @@ def main():
 						levels[screenid].load()
 				if collisions.pointRect(mouse['pos'],instructionButton):
 					screenid -= 1
+
+			# IN-LEVEL ACTIONS
 			else:
 				if collisions.pointRect(mouse['pos'],returnButton):
 					screenid = 2
@@ -350,23 +410,21 @@ def main():
 					for mb in materialButtons:
 						if collisions.pointRect(mouse['pos'],mb):
 							if len(materials[mb.selectionID]) != 0:
-								materials[mb.selectionID][0].pickup()
-								usedMaterials[mb.selectionID].append(materials[mb.selectionID][0])
-								materials[mb.selectionID].remove(materials[mb.selectionID][0])
-								
+								pickupMaterial(mb.selectionID)
 							else:
 								pass #print("NO MORE OF ID " + str(mb.selectionID))
 					for u in usedMaterials:
 						for uu in u:
 							if collisions.pointRect(mouse['pos'],uu):
-								uu.exists = False
-								materials[usedMaterials.index(u)].append(uu)
-								u.remove(uu)
+								resetMaterial(uu)
+
+				# SWITCH IN/OUT OF CONSTRUCTION
 				if collisions.pointRect(mouse['pos'], goButton):
 					inConstruction = not inConstruction
 					daniel.x = levels[screenid].start[0]
 					daniel.y = levels[screenid].start[1]
-                
+
+		# SCREEN STATUS
 		if screenid == 0:
 			titleScreen()
 		elif screenid == 1:
