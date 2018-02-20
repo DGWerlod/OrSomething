@@ -268,7 +268,7 @@ def level():
 	# BACKGROUNDS
 	# ctx.fill(media.lightGrey)
 	ctx.blit(media.background, (0,0))
-	pygame.draw.rect(ctx, media.darkGrey,(700,0,200,600))
+	pygame.draw.rect(ctx, media.lightGrey,(700,0,200,600))
 
 	# BUTTONS
 	
