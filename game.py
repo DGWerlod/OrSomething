@@ -270,48 +270,29 @@ def levelSelect():
     
 def level():
 	# BACKGROUNDS
-	#ctx.fill(media.lightGrey)
+	# ctx.fill(media.lightGrey)
 	ctx.blit(media.background, (0,0))
 	pygame.draw.rect(ctx, media.darkGrey,(700,0,200,600))
 
 	# BUTTONS
+	
 	returnButton.go()
-	goButton.go()
-	for mb in materialButtons:
-		mb.go()
-
-	# BUTTON TEXT
 	ctx.blit(text.returnToLevels,text.returnToLevelsRECT)
 
+	goButton.go()
 	if(inConstruction):
 		ctx.blit(text.goButton,text.goButtonRECT)
 	else:
 		ctx.blit(text.stopButton,text.stopButtonRECT)
 
-	# COUNTERS
+	for mb in materialButtons:
+		mb.go()
 	for c in text.counters:
 		ctx.blit(c[0],c[1])
-	"""
-	counterLong, counterLongRect = media.centeredText("x" + str(len(materials[0])), 30, media.mediumBlue, 50)
-	counterLongRect.right += 825 + 5
-	counterLongRect.top = 200 + 35-2 - counterLongRect.h/2
-	ctx.blit(counterLong,counterLongRect)
-    
-	counterMedium, counterMediumRect = media.centeredText("x" + str(len(materials[1])), 30, media.mediumBlue, 50)
-	counterMediumRect.right += 825 + 5
-	counterMediumRect.top = 275 + 35-2 - counterMediumRect.h/2
-	ctx.blit(counterMedium,counterMediumRect)
-    
-	counterShort, counterShortRect = media.centeredText("x" + str(len(materials[2])), 30, media.mediumBlue, 50)
-	counterShortRect.right += 825 + 5
-	counterShortRect.top = 350 + 35-2 - counterShortRect.h/2
-	ctx.blit(counterShort,counterShortRect)
-	"""
 
-	# OBSTRUCTIONS AND MATERIALS
+	# PLATFORMING ELEMENTS
 	for o in obstructions:
 		o.go()
-
 	for u in usedMaterials:
 		for uu in u:
 			uu.go()

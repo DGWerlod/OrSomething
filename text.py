@@ -1,9 +1,8 @@
 import media
 gameW, gameH, gameIW = 900, 600, 700
 
-# TEXT POSITIONING SETUP
-
 # TITLE SCREEN AND INSTRUCTIONS
+
 title, titleRECT = media.centeredText("In Construction", 60, media.blueOG, gameW)
 titleRECT.top = gameH/2 - titleRECT.height/2 -40
 
@@ -27,7 +26,10 @@ for heightChange in range(50,-150,-50):
 
 # LEVEL SELECTION
 
-# LEVEL
+# todo: this section
+
+# LEVEL PROPER
+
 returnToLevels, returnToLevelsRECT = media.centeredText("Select Level", 20, media.lightGrey, 150)
 returnToLevelsRECT.left += 725
 returnToLevelsRECT.top = 25 + 40 - returnToLevelsRECT.h/2
