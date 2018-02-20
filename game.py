@@ -161,6 +161,8 @@ levelRects = [Selection(25,25,250,175,media.blueOG,3,2),
 				Selection(25,225,250,175,media.blueOG,6,2),
 				Selection(325,225,250,175,media.blueOG,7,2),
 				Selection(625,225,250,175,media.blueOG,8,2)]
+text.buildLevelText(levelRects)
+
 instructionButton = Selection(200,425,500,150,media.blueOG,9,2)
 returnButton = Selection(725,25,150,80,media.darkBlue,2)
 materialButtons = [Selection(725,200,100,50,media.mediumBlue,0),
@@ -250,23 +252,17 @@ def instructions():
 
 def levelSelect():
 	ctx.fill(media.lightGrey)
-	levelNum = 1
 
 	# LEVEL BUTTONS AND TEXT
 	for l in levelRects:
 		l.go()
-		text, textRect = media.centeredText("Level " + str(levelNum), 50,  media.blueOG,250)
-		textRect.left += l.x
-		textRect.top = l.y + l.h/2 - textRect.h/2 - 3 #-3 aesthetic
-		ctx.blit(text,textRect)
-		levelNum += 1
+	for t in text.levelText:
+		ctx.blit(t[0],t[1])
 
 	# RETURN BUTTON AND TEXT
 	instructionButton.go()
-	text, textRect = media.centeredText("Return to Instructions", 30,  media.blueOG, 500)
-	textRect.left += 200
-	textRect.top = 425 + 75 - textRect.h/2 - 3 #-3 aesthetic
-	ctx.blit(text,textRect)   
+	
+	ctx.blit(text.returnToInstructions,text.returnToInstructionsRect)   
     
 def level():
 	# BACKGROUNDS
