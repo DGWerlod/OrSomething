@@ -12,7 +12,7 @@ footerRECT.top = gameH/2 - footerRECT.height/2 +200
 instructionsHeader, instructionsHeaderRECT = media.centeredText("Instructions", 60, media.blueOG, gameW)
 instructionsHeaderRECT.top = instructionsHeaderRECT.height/2 +10
 
-instructionsText = ["1. Drag and drop objects to build your environment","2. Hit GO to start moving",
+instructionsText = ["1. Drag and drop objects to build your environment","2. Hit GO or Right Click to start moving",
 		"3. Use WASD to move and Space to jump", "4. Reach the goal zone to improve your sad life"]
 instructions = [[],[],[],[]]
 

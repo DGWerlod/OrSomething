@@ -8,7 +8,7 @@ global gameW, gameH, gameIW, presets, controls, mouse, screenid, inConstruction
 gameW, gameH, gameIW = 900, 600, 700
 presets = {'keyW':pygame.K_w,'keyA':pygame.K_a,'keyS':pygame.K_s,'keyD':pygame.K_d,'keySpace':pygame.K_SPACE}
 controls = {'keyW':False,'keyA':False,'keyS':False,'keyD':False,'keySpace':False}
-mouse = {'pos':pygame.mouse.get_pos(),'click':False,'held':False}
+mouse = {'pos':pygame.mouse.get_pos(),'left_click':False,'left_held':False,'right_click':False,'right_held':False}
 screenid = 0
 gravity = 0.75
 inConstruction = True
@@ -40,6 +40,15 @@ class Goal(Entity):
 		super().__init__(x,y,w,h,color)
 	def draw(self):
 		pygame.draw.rect(ctx,self.color,(self.x,self.y,self.w,self.h),2)
+
+class RedZone(Entity):
+	def  __init__(self,x,y,w,h,alpha=128):
+		super().__init__(x,y,w,h,media.red)
+		self.surface = pygame.Surface((w,h))
+		self.surface.set_alpha(alpha)
+		self.surface.fill(self.color)
+	def draw(self):
+		ctx.blit(self.surface, (self.x,self.y))
 
 class Selection(Entity):
 	def  __init__(self,x,y,w,h,color,selectionID,strokeWidth=0):
@@ -73,7 +82,7 @@ class Material(Entity):
 		return True
 	def go(self):
 		if self.exists:
-			if not mouse['held']:
+			if not mouse['left_held']:
 				if self.canPlace():
 					self.moving = False
 				else:
@@ -181,11 +190,19 @@ usedMaterials = [[],[],[]]
 daniel= Player(10, 520, 30, 60, 5, media.playerBody, 0)
 
 class Level(object):
-	def __init__(self,start,goal,obstructions,materials):
+	def __init__(self,start,goal,materials,obstructions,redzones=[],enemies=[]): 
 		self.start = start
 		self.goal = goal
 		self.obstructions = obstructions
-		self.materials = materials
+		self.redzones = redzones
+		self.enemies = enemies
+		self.materials = []
+		typeIndex = 0
+		for m in materials:
+			self.materials.append([])
+			for i in range(0,m):
+				self.materials[typeIndex].append(Material(typeIndex))
+			typeIndex += 1
 	def load(self):
 		daniel.x = self.start[0]
 		daniel.y = self.start[1]
@@ -197,28 +214,29 @@ class Level(object):
 		materials = copy.deepcopy(self.materials)
 		usedMaterials = [[],[],[]]
 
+# COMMON LEVEL ELEMENTS ARE PREBUILT HERE
+ground = Entity(0,580,700,20,media.darkBlue)
+startPlatform = Entity(0,580,100,20,media.darkBlue)
+
 # LEVELS ARE BUILT AND ADDED HERE
 levels = [0,0,0, # first 3 empty indeces to comply with opening screens
-		Level((10,520),(660,10),
-			[Entity(0,580,900,20,media.darkBlue)],
-			[[Material(0),Material(0),Material(0),Material(0)],
-			[],[]]),
-		Level((10,520),(660,10),
-			[Entity(0,580,900,20,media.darkBlue),Entity(345,80,10,520,media.darkBlue)],
-			[[Material(0)],
-			[Material(1),Material(1)],[Material(2)]]),
-		Level((10,520),(660,10),
-			[Entity(0,580,900,20,media.darkBlue),Entity(195,150,10,450,media.darkBlue),Entity(395,0,10,450,media.darkBlue)],
-			[[],[Material(1)],[Material(2),Material(2),Material(2),Material(2)]]),
-		Level((10,520),(660,10),
-			[Entity(0,580,100,20,media.darkBlue),Entity(700,580,200,20,media.darkBlue)],
-			[[],[],[Material(2),Material(2),Material(2),Material(2)]]),
-		Level((10,520),(660,10),
-			[Entity(0,580,100,20,media.darkBlue),Entity(700,580,200,20,media.darkBlue),Entity(295,300,10,300,media.darkBlue),Entity(395,0,10,450,media.darkBlue)],
-			[[Material(0)],[],[Material(2),Material(2),Material(2)]]),
-		Level((10,520),(660,10),
-			[Entity(0,580,100,20,media.darkBlue),Entity(700,580,200,20,media.darkBlue),Entity(0,470,300,10,media.darkBlue),],
-			[[],[Material(1)],[Material(2),Material(2),Material(2),Material(2)]]),
+		Level((10,520),(660,10),[4,0,0],
+			[ground]),
+
+		Level((10,520),(660,10),[1,2,1],
+			[ground,Entity(345,80,10,520,media.darkBlue)]),
+
+		Level((10,520),(660,10),[0,1,4],
+			[ground,Entity(195,150,10,450,media.darkBlue),Entity(395,0,10,450,media.darkBlue)]),
+
+		Level((10,520),(660,10),[0,0,4],
+			[startPlatform]),
+
+		Level((10,520),(660,10),[1,0,3],
+			[startPlatform,Entity(295,300,10,300,media.darkBlue),Entity(395,0,10,450,media.darkBlue)]),
+
+		Level((10,520),(660,10),[0,1,4],
+			[startPlatform,Entity(0,470,300,10,media.darkBlue)]),
 ]
 
 # HELPER FUNCTIONS
@@ -235,6 +253,13 @@ def resetMaterial(material):
 	materials[material.type].append(material)
 	usedMaterials[material.type].remove(material)
 	text.refreshCounter(material.type, len(materials[material.type]))
+
+def switchMode():
+	global inConstruction
+	inConstruction = not inConstruction
+	daniel.x = levels[screenid].start[0]
+	daniel.y = levels[screenid].start[1]
+
 
 # SCREEN TYPE FUNCTIONS
 
@@ -269,7 +294,7 @@ def level():
 	# ctx.fill(media.lightGrey)
 	ctx.blit(media.background, (0,0))
 	pygame.draw.rect(ctx, media.lightGrey,(700,0,200,600))
-
+	pygame.draw.rect(ctx, media.darkBlue,(700,580,200,20)) # ground below right panel for symmetry
 	# BUTTONS
 	
 	returnButton.go()
@@ -296,7 +321,7 @@ def level():
 	# PLAYER ELEMENTS
 	goalLocation.go()
 	daniel.go()
-    
+
     # LEVEL COMPLETION
 	if collisions.rectangles(goalLocation,daniel):
 		global screenid
@@ -314,14 +339,23 @@ def main():
 		# EVENT HANDLING - MOUSE
 		info = pygame.mouse.get_pressed()
 		if info[0] == True:
-			if mouse['held'] == False:
-				mouse['click'] = True
-				mouse['held'] = True
+			if mouse['left_held'] == False:
+				mouse['left_click'] = True
+				mouse['left_held'] = True
 			else:
-				mouse['click'] = False
+				mouse['left_click'] = False
 		else:
-			mouse['click'] = False
-			mouse['held'] = False
+			mouse['left_click'] = False
+			mouse['left_held'] = False
+		if info[2] == True:
+			if mouse['right_held'] == False:
+				mouse['right_click'] = True
+				mouse['right_held'] = True
+			else:
+				mouse['right_click'] = False
+		else:
+			mouse['right_click'] = False
+			mouse['right_held'] = False
 
 		mouse['pos'] = pygame.mouse.get_pos()
 
@@ -339,7 +373,7 @@ def main():
 						controls[p] = False
 
 		# CLICK ACTIONS
-		if mouse['click']:
+		if mouse['left_click']:
 			
 			# INTRO SCREENS
 			if screenid < 2:
@@ -375,9 +409,11 @@ def main():
 
 				# SWITCH IN/OUT OF CONSTRUCTION
 				if collisions.pointRect(mouse['pos'], goButton):
-					inConstruction = not inConstruction
-					daniel.x = levels[screenid].start[0]
-					daniel.y = levels[screenid].start[1]
+					switchMode()
+
+		if mouse['right_click']:
+			if screenid > 2:
+				switchMode()
 
 		# SCREEN STATUS
 		if screenid == 0:

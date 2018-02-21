@@ -35,6 +35,8 @@ darkBlue = (0,65,128)
 lightGrey = (236,236,236)
 darkGrey =(206,206,206)
 
+red = (255,30,32) # split compliment #2 of blueOG
+
 # NOTES
 # font.render: text, antialias, color, bg
 # this creates a surface (img?) you can blit
