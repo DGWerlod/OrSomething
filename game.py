@@ -215,7 +215,7 @@ class Level(object):
 		usedMaterials = [[],[],[]]
 
 # COMMON LEVEL ELEMENTS ARE PREBUILT HERE
-ground = Entity(0,580,700,20,media.darkBlue)
+ground = Entity(0,580,gameIW,20,media.darkBlue)
 startPlatform = Entity(0,580,100,20,media.darkBlue)
 
 # LEVELS ARE BUILT AND ADDED HERE
@@ -293,8 +293,10 @@ def level():
 	# BACKGROUNDS
 	# ctx.fill(media.lightGrey)
 	ctx.blit(media.background, (0,0))
-	pygame.draw.rect(ctx, media.lightGrey,(700,0,200,600))
-	pygame.draw.rect(ctx, media.darkBlue,(700,580,200,20)) # ground below right panel for symmetry
+	pygame.draw.rect(ctx, media.lightGrey,(gameIW,0,200,gameH))
+	pygame.draw.line(ctx, media.black,(gameIW-1,0),(gameIW-1,gameH),2)
+	pygame.draw.rect(ctx, media.darkBlue,(gameIW-1,580,200+1,20)) # ground below right panel for symmetry
+	
 	# BUTTONS
 	
 	returnButton.go()
