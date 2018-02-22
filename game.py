@@ -80,6 +80,9 @@ class Material(Entity):
 			if collisions.rectangles(self,mb):
 				return False
 		return True
+	def pos(self):
+		self.x = mouse['pos'][0]-self.w/2
+		self.y = mouse['pos'][1]-self.h/2
 	def go(self):
 		if self.exists:
 			if not mouse['left_held']:
@@ -88,8 +91,7 @@ class Material(Entity):
 				else:
 					resetMaterial(self)
 			if self.moving:
-				self.x = mouse['pos'][0]-self.w/2
-				self.y = mouse['pos'][1]-self.h/2
+				self.pos()
 			self.draw()
 
 class Actor(Entity):
@@ -242,14 +244,15 @@ levels = [0,0,0, # first 3 empty indeces to comply with opening screens
 # HELPER FUNCTIONS
 
 def pickupMaterial(selectionID):
-	materials[selectionID][0].exists = True
-	materials[selectionID][0].moving = True
+	materials[selectionID][0].pos()
+	materials[selectionID][0].exists, materials[selectionID][0].moving = True, True
 	usedMaterials[selectionID].append(materials[selectionID][0])
 	materials[selectionID].remove(materials[selectionID][0])
 	text.refreshCounter(selectionID, len(materials[selectionID]))
 
 def resetMaterial(material):
-	material.exists = False
+	material.pos()
+	material.exists, material.moving = False, False
 	materials[material.type].append(material)
 	usedMaterials[material.type].remove(material)
 	text.refreshCounter(material.type, len(materials[material.type]))
@@ -398,16 +401,16 @@ def main():
 				if collisions.pointRect(mouse['pos'],returnButton):
 					screenid = 2
 				if inConstruction:
+					for u in usedMaterials:
+						for uu in u:
+							if collisions.pointRect(mouse['pos'],uu):
+								resetMaterial(uu)
 					for mb in materialButtons:
 						if collisions.pointRect(mouse['pos'],mb):
 							if len(materials[mb.selectionID]) != 0:
 								pickupMaterial(mb.selectionID)
 							else:
 								pass #print("NO MORE OF ID " + str(mb.selectionID))
-					for u in usedMaterials:
-						for uu in u:
-							if collisions.pointRect(mouse['pos'],uu):
-								resetMaterial(uu)
 
 				# SWITCH IN/OUT OF CONSTRUCTION
 				if collisions.pointRect(mouse['pos'], goButton):
