@@ -19,7 +19,7 @@ def centeredText(rawText,size,color,widthOfParent):
 
 # IMAGES
 
-background = pygame.image.load("img/background.png")
+background = pygame.image.load("img/backgroundLight.png")
 playerBody = [pygame.image.load("img/basic.png"),
 			pygame.image.load("img/lessBasic.png"),
 			pygame.image.load("img/leastBasic.png"),]
@@ -33,6 +33,7 @@ blueOG = (30,144,255)
 mediumBlue = (0,105,207)
 darkBlue = (0,65,128)
 lightGrey = (236,236,236)
+levelGrey = (221,221,221)
 darkGrey =(206,206,206)
 
 red = (255,30,32) # split compliment #2 of blueOG

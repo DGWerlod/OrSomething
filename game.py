@@ -39,7 +39,8 @@ class Goal(Entity):
 	def  __init__(self,x,y,w,h,color):
 		super().__init__(x,y,w,h,color)
 	def draw(self):
-		pygame.draw.rect(ctx,self.color,(self.x,self.y,self.w,self.h),2)
+		# pygame.draw.rect(ctx,self.color,(self.x,self.y,self.w,self.h),2)
+		dashedRect(self.x, self.y, self.w, self.h, 2, 3, 10, self.color)
 
 class RedZone(Entity):
 	def  __init__(self,x,y,w,h,alpha=128):
@@ -263,6 +264,16 @@ def switchMode():
 	daniel.x = levels[screenid].start[0]
 	daniel.y = levels[screenid].start[1]
 
+def dashedRect(x, y, w, h, sW, sG, sA, color):
+	# sW = stroke width (thickness), sG = stroke gap (blank space to left and right of dash in each sA),
+	# sA = stroke area (the amount of pixels equal to the sum of one stroke length and two stroke gaps)
+	for dx in range(0,w,sA):
+		pygame.draw.line(ctx,color,(x + dx + sG, y),(x + dx + sA-sG, y),sW)
+		pygame.draw.line(ctx,color,(x + dx + sG, y + h-sW/2),(x + dx + sA-sG, y + h-sW/2),sW)
+	for dy in range(0,h,sA):
+		pygame.draw.line(ctx,color,(x, y + dy + sG),(x, y + dy + sA-sG),2)
+		pygame.draw.line(ctx,color,(x + w-sW/2, y + dy + sG),(x + w-sW/2, y + dy + sA-sG),sW)
+
 
 # SCREEN TYPE FUNCTIONS
 
@@ -296,7 +307,7 @@ def level():
 	# BACKGROUNDS
 	# ctx.fill(media.lightGrey)
 	ctx.blit(media.background, (0,0))
-	pygame.draw.rect(ctx, media.lightGrey,(gameIW,0,200,gameH))
+	pygame.draw.rect(ctx, media.levelGrey,(gameIW,0,200,gameH))
 	pygame.draw.line(ctx, media.black,(gameIW-1,0),(gameIW-1,gameH),2)
 	pygame.draw.rect(ctx, media.darkBlue,(gameIW-1,580,200+1,20)) # ground below right panel for symmetry
 	
