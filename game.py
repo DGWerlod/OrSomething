@@ -40,7 +40,7 @@ class Goal(Entity):
 		super().__init__(x,y,w,h,color)
 	def draw(self):
 		# pygame.draw.rect(ctx,self.color,(self.x,self.y,self.w,self.h),2)
-		dashedRect(self.x, self.y, self.w, self.h, 2, 3, 10, self.color)
+		drawDahsedRect(self.x, self.y, self.w, self.h, 2, 3, 10, self.color)
 
 class RedZone(Entity):
 	def  __init__(self,x,y,w,h,alpha=128):
@@ -264,7 +264,7 @@ def switchMode():
 	daniel.x = levels[screenid].start[0]
 	daniel.y = levels[screenid].start[1]
 
-def dashedRect(x, y, w, h, sW, sG, sA, color):
+def drawDahsedRect(x, y, w, h, sW, sG, sA, color):
 	# sW = stroke width (thickness), sG = stroke gap (blank space to left and right of dash in each sA),
 	# sA = stroke area (the amount of pixels equal to the sum of one stroke length and two stroke gaps)
 	for dx in range(0,w,sA):
