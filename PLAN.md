@@ -1,5 +1,4 @@
-Instructions:
-- WASD to move
-- Space to jump
-- Drag and drop objects to build your environment
-- Reach the goal zone to improve your sad life
+Possible Effects:
+- Zones you can't put blocks in (translucent red, filled-in rectangles)
+- Gravity-altering areas or stages (light yellow arrows in BG)
+- Parts of the floor in which jumping is much more effective (green arrows extending from floor a short distance up, but behind player)
