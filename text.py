@@ -26,20 +26,24 @@ for heightChange in range(50,-150,-50):
 
 # LEVEL SELECTION
 
+global levelText, returnToInstructions, returnToInstructionsRECT
 levelText = []
+returnToInstructions, returnToInstructionsRECT = media.centeredText("", 0,  (0,0,0), 0)
 
-def buildLevelText(levelRects):
+def buildLevelSelectText(levelRects, returnRect):
+	global levelText, returnToInstructions, returnToInstructionsRECT
 	levelNum = 1
 	for l in levelRects:
-		now, nowRECT = media.centeredText("Level " + str(levelNum), 50,  media.blueOG, 250)
+		now, nowRECT = media.centeredText("Level " + str(levelNum), int(l.w/5),  media.blueOG, l.w) # size orig. 250 -> 50
 		nowRECT.left += l.x
 		nowRECT.top = l.y + l.h/2 - nowRECT.h/2 - 3 #-3 aesthetic
 		levelText.append([now,nowRECT])
 		levelNum += 1
+	returnToInstructions, returnToInstructionsRECT = media.centeredText("Return to Instructions", 25,  media.blueOG, returnRect.w)
+	returnToInstructionsRECT.left += returnRect.x
+	returnToInstructionsRECT.top = returnRect.y + returnRect.h/2 - returnToInstructionsRECT.h/2 - 3 #-3 aesthetic
 
-returnToInstructions, returnToInstructionsRect = media.centeredText("Return to Instructions", 30,  media.blueOG, 500)
-returnToInstructionsRect.left += 200
-returnToInstructionsRect.top = 425 + 75 - returnToInstructionsRect.h/2 - 3 #-3 aesthetic
+
 
 # LEVEL PROPER
 

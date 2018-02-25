@@ -21,7 +21,7 @@ clock = pygame.time.Clock()
 # CLASSES
 
 class Entity(object):
-	def  __init__(self,x,y,w,h,color):
+	def  __init__(self,x,y,w,h,color=media.black):
 		self.x = x
 		self.y = y
 		self.w = w
@@ -36,8 +36,8 @@ class Entity(object):
 		self.draw()
 
 class Goal(Entity):
-	def  __init__(self,x,y,w,h,color):
-		super().__init__(x,y,w,h,color)
+	def  __init__(self,x,y,w,h):
+		super().__init__(x,y,w,h,media.blueOG)
 	def draw(self):
 		# pygame.draw.rect(ctx,self.color,(self.x,self.y,self.w,self.h),2)
 		drawDahsedRect(self.x, self.y, self.w, self.h, 2, 3, 10, self.color)
@@ -167,15 +167,19 @@ class Player(Actor):
 
 # STATIC OBJECT SETUP
 
-levelRects = [Selection(25,25,250,175,media.blueOG,3,2),
-				Selection(325,25,250,175,media.blueOG,4,2),
-				Selection(625,25,250,175,media.blueOG,5,2),
-				Selection(25,225,250,175,media.blueOG,6,2),
-				Selection(325,225,250,175,media.blueOG,7,2),
-				Selection(625,225,250,175,media.blueOG,8,2)]
-text.buildLevelText(levelRects)
+levelRects = []
+perRow, perColumn = 5, 3
+w, h = 150, 125
+nowID = 3
+for column in range(perColumn):
+	for row in range(perRow):
+		levelRects.append(Selection(25 + (w + 25)*row, 25 + (h + 25)*column, w, h, media.blueOG, nowID, 2))
+		nowID += 1
 
-instructionButton = Selection(200,425,500,150,media.blueOG,9,2)
+instructionButton = Selection(250,475,400,100,media.blueOG,1,2)
+
+text.buildLevelSelectText(levelRects, instructionButton)
+
 returnButton = Selection(725,25,150,80,media.darkBlue,2)
 materialButtons = [Selection(725,200,100,50,media.mediumBlue,0),
 					Selection(725,275,50,50,media.mediumBlue,1),
@@ -184,11 +188,13 @@ goButton = Selection(725,475,150,80,media.mediumBlue,-1)
 
 # DYNAMIC OBJECT SETUP
 
-goalLocation = Goal(0,0,30,60,media.blueOG)
-global obstructions, materials, usedMaterials
+goalLocation = Goal(0,0,30,60)
+global obstructions, materials, usedMaterials, redZones, enemies
 obstructions = []
 materials = [[],[],[]]
 usedMaterials = [[],[],[]]
+redzones = []
+enemies = []
 
 daniel= Player(10, 520, 30, 60, 5, media.playerBody, 0)
 
@@ -221,23 +227,67 @@ class Level(object):
 ground = Entity(0,580,gameIW,20,media.darkBlue)
 startPlatform = Entity(0,580,100,20,media.darkBlue)
 
-# LEVELS ARE BUILT AND ADDED HERE
-levels = [0,0,0, # first 3 empty indeces to comply with opening screens
+# LEVELS ARE BUILT AND ADDED HERE; first 3 empty indeces to comply with opening screens
+levels = [0,0,0, 
+		# 1
 		Level((10,520),(660,10),[4,0,0],
 			[ground]),
 
+		# 2
 		Level((10,520),(660,10),[1,2,1],
 			[ground,Entity(345,80,10,520,media.darkBlue)]),
 
+		# 3
 		Level((10,520),(660,10),[0,1,4],
 			[ground,Entity(195,150,10,450,media.darkBlue),Entity(395,0,10,450,media.darkBlue)]),
 
+		# 4
 		Level((10,520),(660,10),[0,0,4],
 			[startPlatform]),
 
+		# 5
 		Level((10,520),(660,10),[1,0,3],
 			[startPlatform,Entity(295,300,10,300,media.darkBlue),Entity(395,0,10,450,media.darkBlue)]),
 
+		# 6
+		Level((10,520),(660,10),[0,1,4],
+			[startPlatform,Entity(0,470,300,10,media.darkBlue)]),
+
+		# End of Designed Levels
+
+		# 7
+		Level((10,520),(660,10),[0,1,4],
+			[startPlatform,Entity(0,470,300,10,media.darkBlue)]),
+
+		# 8
+		Level((10,520),(660,10),[0,1,4],
+			[startPlatform,Entity(0,470,300,10,media.darkBlue)]),
+
+		# 9
+		Level((10,520),(660,10),[0,1,4],
+			[startPlatform,Entity(0,470,300,10,media.darkBlue)]),
+
+		# 10
+		Level((10,520),(660,10),[0,1,4],
+			[startPlatform,Entity(0,470,300,10,media.darkBlue)]),
+
+		# 11
+		Level((10,520),(660,10),[0,1,4],
+			[startPlatform,Entity(0,470,300,10,media.darkBlue)]),
+
+		# 12
+		Level((10,520),(660,10),[0,1,4],
+			[startPlatform,Entity(0,470,300,10,media.darkBlue)]),
+
+		# 13
+		Level((10,520),(660,10),[0,1,4],
+			[startPlatform,Entity(0,470,300,10,media.darkBlue)]),
+
+		# 14
+		Level((10,520),(660,10),[0,1,4],
+			[startPlatform,Entity(0,470,300,10,media.darkBlue)]),
+
+		# 15
 		Level((10,520),(660,10),[0,1,4],
 			[startPlatform,Entity(0,470,300,10,media.darkBlue)]),
 ]
@@ -301,7 +351,7 @@ def levelSelect():
 	# RETURN BUTTON AND TEXT
 	instructionButton.go()
 	
-	ctx.blit(text.returnToInstructions,text.returnToInstructionsRect)   
+	ctx.blit(text.returnToInstructions,text.returnToInstructionsRECT)   
     
 def level():
 	# BACKGROUNDS
