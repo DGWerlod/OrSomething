@@ -199,7 +199,7 @@ enemies = []
 daniel= Player(10, 520, 30, 60, 5, media.playerBody, 0)
 
 class Level(object):
-	def __init__(self,start,goal,materials,obstructions,redzones=[],enemies=[]): 
+	def __init__(self,start,goal,materials,obstructions,redzones=[],enemies=[]):
 		self.start = start
 		self.goal = goal
 		self.obstructions = obstructions
@@ -228,7 +228,7 @@ ground = Entity(0,580,gameIW,20,media.darkBlue)
 startPlatform = Entity(0,580,100,20,media.darkBlue)
 
 # LEVELS ARE BUILT AND ADDED HERE; first 3 empty indeces to comply with opening screens
-levels = [0,0,0, 
+levels = [0,0,0,
 		# 1
 		Level((10,520),(660,10),[4,0,0],
 			[ground]),
@@ -350,9 +350,9 @@ def levelSelect():
 
 	# RETURN BUTTON AND TEXT
 	instructionButton.go()
-	
-	ctx.blit(text.returnToInstructions,text.returnToInstructionsRECT)   
-    
+
+	ctx.blit(text.returnToInstructions,text.returnToInstructionsRECT)
+
 def level():
 	# BACKGROUNDS
 	# ctx.fill(media.lightGrey)
@@ -360,9 +360,9 @@ def level():
 	pygame.draw.rect(ctx, media.levelGrey,(gameIW,0,200,gameH))
 	pygame.draw.line(ctx, media.black,(gameIW-1,0),(gameIW-1,gameH),2)
 	pygame.draw.rect(ctx, media.darkBlue,(gameIW-1,580,200+1,20)) # ground below right panel for symmetry
-	
+
 	# BUTTONS
-	
+
 	returnButton.go()
 	ctx.blit(text.returnToLevels,text.returnToLevelsRECT)
 
@@ -393,14 +393,10 @@ def level():
 		global screenid
 		screenid = 2
 
-def close():
-	pygame.display.quit() # prevents a rare crashing bug
-	pygame.quit()
-	quit()
-
 def main():
 	global screenid, inConstruction
-	while True:
+	running = True
+	while running:
 
 		# EVENT HANDLING - MOUSE
 		info = pygame.mouse.get_pressed()
@@ -428,7 +424,7 @@ def main():
 		# EVENT HANDLING - KEYS
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				close()
+				running = False
 			elif event.type == pygame.KEYDOWN:
 				for p in presets:
 					if event.key == presets[p]:
@@ -440,7 +436,7 @@ def main():
 
 		# CLICK ACTIONS
 		if mouse['left_click']:
-			
+
 			# INTRO SCREENS
 			if screenid < 2:
 				screenid += 1
@@ -499,3 +495,4 @@ def main():
 		pygame.display.update()
 		clock.tick(60)
 main()
+pygame.quit()
